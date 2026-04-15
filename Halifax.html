@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serena Xie — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #f7f6f4;
+  font-family: 'Jost', sans-serif;
+  min-height: 100vh;
+  padding: clamp(32px, 6vw, 80px) clamp(16px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(32px, 5vw, 60px);
+}
+
+/* ── Book spread wrapper ───────────────────────────── */
+.spread {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #ffffff;
+  box-shadow:
+    0 4px 6px rgba(0,0,0,.04),
+    0 12px 40px rgba(0,0,0,.10),
+    0 30px 80px rgba(0,0,0,.08);
+  position: relative;
+  border-radius: 2px 6px 6px 2px;
+}
+
+/* center spine shadow */
+.spread::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%; width: 28px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0,0,0,.03) 30%,
+    rgba(0,0,0,.07) 50%,
+    rgba(0,0,0,.03) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Mobile: stack pages vertically */
+@media (max-width: 640px) {
+  .spread {
+    grid-template-columns: 1fr;
+    border-radius: 4px;
+  }
+  .spread::after { display: none; }
+}
+
+/* ── Left page ─────────────────────────────────────── */
+.page-left {
+  padding: clamp(32px, 5vw, 64px) clamp(24px, 4vw, 52px) clamp(32px, 5vw, 64px) clamp(24px, 4vw, 56px);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(0,0,0,.06);
+  min-height: clamp(400px, 55vw, 640px);
+}
+
+@media (max-width: 640px) {
+  .page-left {
+    border-right: none;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    min-height: unset;
+  }
+}
+
+.project-meta {
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #b0aba4;
+  margin-bottom: 10px;
+  font-family: 'Jost', sans-serif;
+}
+
+.project-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(64px, 8vw, 110px);
+  font-weight: 300;
+  line-height: 1;
+  color: #1a1a1a;
+  margin-bottom: clamp(24px, 4vw, 40px);
+  letter-spacing: -.02em;
+}
+
+.project-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.project-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.9;
+  color: #1a1a1a;
+  max-width: 260px;
+  margin-bottom: 28px;
+}
+
+.criteria-list {
+  list-style: none;
+  margin-bottom: 28px;
+}
+.criteria-list li {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.9;
+  padding-left: 16px;
+  position: relative;
+}
+.criteria-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #b0aba4;
+  font-size: 11px;
+}
+
+.section-label {
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #8a8680;
+  margin-bottom: 10px;
+  font-family: 'Jost', sans-serif;
+  display: block;
+}
+
+.project-location {
+  margin-top: auto;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: #8a8680;
+  line-height: 1.8;
+  text-align: right;
+}
+
+.location-label {
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ── Right page ────────────────────────────────────── */
+.page-right {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(300px, 50vw, 640px);
+}
+
+@media (max-width: 640px) {
+  .page-right {
+    min-height: 60vw;
+  }
+}
+
+.page-right img,
+.page-right embed,
+.page-right iframe {
+  position: absolute;
+  inset: 0 24px;
+  width: calc(100% - 48px);
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* clickable map */
+.page-right img.map-click {
+  cursor: zoom-in;
+  transition: opacity .2s;
+}
+.page-right img.map-click:hover {
+  opacity: .85;
+}
+
+/* ── Full-bleed spread ─────────────────────────────── */
+.spread-full {
+  width: 100%;
+  max-width: 1100px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 4px 6px rgba(0,0,0,.04),
+    0 12px 40px rgba(0,0,0,.10),
+    0 30px 80px rgba(0,0,0,.08);
+  border-radius: 2px 6px 6px 2px;
+  cursor: zoom-in;
+}
+
+.spread-full img {
+  width: 100%;
+  display: block;
+  transition: opacity .2s;
+}
+.spread-full:hover img {
+  opacity: .85;
+}
+
+.spread-full::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%; width: 28px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0,0,0,.04) 30%,
+    rgba(0,0,0,.09) 50%,
+    rgba(0,0,0,.04) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Pull quote ────────────────────────────────────── */
+.page-left.quote-page {
+  justify-content: center;
+}
+.pull-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  color: #1a1a1a;
+  line-height: 2;
+  max-width: 280px;
+  margin-bottom: 16px;
+}
+.quote-attr {
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #8a8680;
+  font-family: 'Jost', sans-serif;
+}
+
+/* ── Lightbox ──────────────────────────────────────── */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.92);
+  z-index: 1000;
+  cursor: zoom-out;
+  align-items: center;
+  justify-content: center;
+}
+#lightbox.active {
+  display: flex;
+}
+#lightbox img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+  pointer-events: none;
+  box-shadow: 0 8px 60px rgba(0,0,0,.6);
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SPREAD 1 — Title page + Halifax overview
+     ══════════════════════════════════════════ -->
+<div class="spread">
+
+  <!-- LEFT PAGE -->
+  <div class="page-left">
+    <div class="project-num">Halifax</div>
+
+    <h2 class="project-title">Light Rail Transit Proposal</h2>
+    <p class="project-body">
+      A GIS-based multi-criteria analysis identifying an optimal
+      Light Rail Transit corridor connecting suburban Halifax to
+      the downtown train station. Using ArcGIS Pro, an impedance
+      surface was constructed from terrain, hydrology, wetland
+      sensitivity, commuter density, and existing bus network
+      proximity across the Halifax Regional Municipality.
+    </p>
+
+    <span class="section-label">Impedance Criteria</span>
+    <ul class="criteria-list">
+      <li>Terrain slope (LiDAR DEM)</li>
+      <li>Distance to water bodies</li>
+      <li>Distance to wetlands</li>
+      <li>Commuter density by dissemination area</li>
+      <li>Proximity to existing transit routes</li>
+    </ul>
+
+    <div class="project-location">
+      <span class="location-label">Location</span>
+      Halifax Regional Municipality<br>
+      Nova Scotia, Canada
+    </div>
+  </div>
+
+  <!-- RIGHT PAGE — Halifax overview map -->
+  <div class="page-right">
+    <img src="Halifax/mapit-export (1).svg" alt="Halifax overview">
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     SPREAD 2 — Part 1: Original LCP map
+     ══════════════════════════════════════════ -->
+<div class="spread">
+
+  <!-- LEFT PAGE -->
+  <div class="page-left">
+    <p class="project-meta" style="color:#1a1a1a;font-weight:400;">Part I &nbsp;·&nbsp; Original Analysis</p>
+
+    <h2 class="project-title">Four-Criteria<br>Impedance Surface</h2>
+    <p class="project-body">
+      The initial least cost path was derived from a composite
+      raster integrating four environmental and demographic
+      factors. Cell impedance values ranged from 125 to 17,025,
+      with the path corridor favouring low-slope, populated
+      areas clear of hydrological features.
+    </p>
+
+    <span class="section-label">Methodology</span>
+    <ul class="criteria-list">
+      <li>Slope reclassified from LiDAR DEM (1m resolution)</li>
+      <li>Euclidean distance to lakes and rivers</li>
+      <li>Euclidean distance to wetland polygons</li>
+      <li>Commuter density from 2021 Census DA data</li>
+      <li>Rasters summed and normalised as Raster_TOTAL</li>
+    </ul>
+
+    <p class="project-body" style="max-width:280px;margin-top:auto;margin-bottom:0;">
+      The resulting route traced populated commuter corridors
+      while avoiding steep terrain and sensitive hydrological
+      features — establishing the baseline alignment for
+      further refinement.
+    </p>
+  </div>
+
+  <!-- RIGHT PAGE — Layout1.jpg (click to fullscreen) -->
+  <div class="page-right">
+    <img src="Halifax/Layout1.jpg" alt="Part 1 — Original LCP Route" class="map-click" data-full="Halifax/Layout1.jpg">
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     SPREAD 3 — Part 2: Expanded analysis (full-bleed)
+     ══════════════════════════════════════════ -->
+<div class="spread-full" data-full="Halifax/Layout2.jpg">
+  <img src="Halifax/Layout2.jpg" alt="Part 2 — Expanded LCP with Bus Network">
+</div>
+
+<!-- ══════════════════════════════════════════
+     SPREAD 4 — Discussion + Layout3
+     ══════════════════════════════════════════ -->
+<div class="spread">
+
+  <!-- LEFT PAGE -->
+  <div class="page-left quote-page">
+    <p class="project-meta" style="color:#1a1a1a;font-weight:400;">Part II &nbsp;·&nbsp; Expanded Analysis</p>
+    <div style="margin-bottom:32px;margin-top:16px;">
+      <p class="pull-quote">
+        "Multimodal integration is not an
+        addendum to transit planning —
+        it is the condition upon which
+        a route earns its right of way."
+      </p>
+      <p class="quote-attr">— Halifax Rapid Transit Strategy, 2020</p>
+    </div>
+
+    <h2 class="project-title">Bus Network<br>Integration</h2>
+    <p class="project-body">
+      A fifth criterion — proximity to existing Halifax Transit
+      bus routes — was introduced as a multimodal connectivity
+      layer. Stops within 200 m received the lowest impedance
+      penalty; beyond 1,000 m the cost rose sharply to 2,000.
+    </p>
+    <p class="project-body" style="max-width:280px;">
+      The Part 2 route diverged only marginally from Part 1,
+      confirming that existing bus corridors already occupy
+      low-impedance terrain. The expanded alignment is
+      recommended for its stronger alignment with Halifax's
+      Rapid Transit Strategy and its potential to reduce
+      car dependency across suburban commuter zones.
+    </p>
+  </div>
+
+  <!-- RIGHT PAGE — Layout3.jpg (click to fullscreen) -->
+  <div class="page-right">
+    <img src="Halifax/Layout3.jpg" alt="Part 2 — Discussion Map" class="map-click" data-full="Halifax/Layout3.jpg">
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     LIGHTBOX OVERLAY
+     ══════════════════════════════════════════ -->
+<div id="lightbox">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+
+  document.querySelectorAll('img.map-click').forEach(img => {
+    img.addEventListener('click', () => {
+      lbImg.src = img.dataset.full || img.src;
+      lb.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.spread-full[data-full]').forEach(el => {
+    el.addEventListener('click', () => {
+      lbImg.src = el.dataset.full;
+      lb.classList.add('active');
+    });
+  });
+
+  lb.addEventListener('click', () => {
+    lb.classList.remove('active');
+    lbImg.src = '';
+  });
+</script>
+
+</body>
+</html>
