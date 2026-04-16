@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toronto Healthcare Access — Serena</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg:     #f7f6f4;
+  --white:  #ffffff;
+  --ink:    #1a1a1a;
+  --muted:  rgba(30,25,20,0.38);
+  --border: rgba(0,0,0,0.08);
+  --subtle: #8a8680;
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  padding: clamp(80px,10vh,120px) clamp(16px,4vw,40px) clamp(32px,5vw,60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(32px,5vw,60px);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+/* ── Nav ─────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(18px,3vh,28px) clamp(24px,4vw,52px);
+  background: var(--bg);
+}
+.nav-logo {
+  font-family: 'EB Garamond', serif;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: .04em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .2s;
+  font-family: 'Inter', sans-serif;
+  border: none; background: none; cursor: pointer;
+}
+.nav-links a:hover,
+.nav-links a.active { color: var(--ink); }
+
+/* ── Spread ───────────────────────────────────────────── */
+.spread {
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--white);
+  box-shadow:
+    0 4px 6px rgba(0,0,0,.04),
+    0 12px 40px rgba(0,0,0,.10),
+    0 30px 80px rgba(0,0,0,.08);
+  position: relative;
+  border-radius: 2px 6px 6px 2px;
+}
+.spread::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%; width: 28px;
+  transform: translateX(-50%);
+  background: linear-gradient(to right,
+    transparent 0%, rgba(0,0,0,.03) 30%,
+    rgba(0,0,0,.07) 50%, rgba(0,0,0,.03) 70%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+@media (max-width: 640px) {
+  .spread { grid-template-columns: 1fr; border-radius: 4px; }
+  .spread::after { display: none; }
+}
+
+/* ── Left page ───────────────────────────────────────── */
+.page-left {
+  padding: clamp(32px,5vw,64px) clamp(24px,4vw,52px) clamp(32px,5vw,64px) clamp(24px,4vw,56px);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(0,0,0,.06);
+  min-height: clamp(400px,55vw,640px);
+}
+@media (max-width: 640px) {
+  .page-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,.06); min-height: unset; }
+}
+
+.project-meta {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
+}
+.project-num {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(52px,7vw,88px);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: clamp(20px,3vw,32px);
+  letter-spacing: -.01em;
+}
+.project-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+.project-body {
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--ink);
+  max-width: 280px;
+  margin-bottom: 24px;
+}
+.section-label {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 8px;
+  font-family: 'Inter', sans-serif;
+  display: block;
+}
+.criteria-list { list-style: none; margin-bottom: 24px; }
+.criteria-list li {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.85;
+  padding-left: 16px;
+  position: relative;
+}
+.criteria-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--subtle);
+  font-size: 11px;
+}
+
+/* data info block */
+.data-info {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.data-info p {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: .04em;
+  color: var(--subtle);
+  line-height: 1.9;
+}
+.data-info strong {
+  font-weight: 500;
+  color: #6a6560;
+}
+
+/* research question callout */
+.rq-box {
+  border-left: 2px solid var(--subtle);
+  padding: 10px 14px;
+  margin-bottom: 24px;
+}
+.rq-box p {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+/* method blocks */
+.method-block { margin-bottom: 28px; }
+.method-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.method-body {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--ink);
+  max-width: 280px;
+}
+.method-body code {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  background: rgba(0,0,0,.05);
+  padding: 1px 5px;
+  border-radius: 2px;
+  color: #3a3630;
+}
+
+/* finding blocks */
+.finding-block { margin-bottom: 24px; }
+.finding-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 6px;
+  display: block;
+}
+.finding-body {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--ink);
+  max-width: 280px;
+}
+
+/* discuss blocks */
+.discuss-block { margin-bottom: 20px; }
+.discuss-label {
+  font-size: 8px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 6px;
+  display: block;
+}
+.discuss-body {
+  font-family: 'EB Garamond', serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--ink);
+  max-width: 280px;
+}
+
+.pull-quote {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 2;
+  max-width: 280px;
+  margin-bottom: 16px;
+}
+.quote-attr {
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  font-family: 'Inter', sans-serif;
+}
+
+.project-location {
+  margin-top: auto;
+  font-family: 'EB Garamond', serif;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--subtle);
+  line-height: 1.8;
+  text-align: right;
+}
+.location-label {
+  font-style: normal;
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ── Right page ──────────────────────────────────────── */
+.page-right {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(300px,50vw,640px);
+}
+@media (max-width: 640px) { .page-right { min-height: 60vw; } }
+.page-right img {
+  position: absolute;
+  inset: 0 24px;
+  width: calc(100% - 48px);
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.page-right embed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.page-right img.map-click {
+  cursor: zoom-in;
+  transition: opacity .2s;
+}
+.page-right img.map-click:hover { opacity: .85; }
+
+/* ── Right page text variant ─────────────────────────── */
+.page-right.text-right {
+  position: static;
+  overflow: visible;
+  padding: clamp(32px,5vw,64px) clamp(24px,4vw,52px) clamp(32px,5vw,64px) clamp(24px,4vw,40px);
+  display: flex;
+  flex-direction: column;
+}
+.page-right.text-right img,
+.page-right.text-right embed,
+.page-right.text-right iframe {
+  position: static;
+  inset: unset;
+  width: unset;
+  height: unset;
+  object-fit: unset;
+}
+
+/* ── Full-bleed spread ───────────────────────────────── */
+.spread-full {
+  width: 100%;
+  max-width: 1100px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 4px 6px rgba(0,0,0,.04),
+    0 12px 40px rgba(0,0,0,.10),
+    0 30px 80px rgba(0,0,0,.08);
+  border-radius: 2px 6px 6px 2px;
+  cursor: zoom-in;
+}
+.spread-full img { width: 100%; display: block; transition: opacity .2s; }
+.spread-full:hover img { opacity: .85; }
+.spread-full::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%; width: 28px;
+  transform: translateX(-50%);
+  background: linear-gradient(to right,
+    transparent 0%, rgba(0,0,0,.04) 30%,
+    rgba(0,0,0,.09) 50%, rgba(0,0,0,.04) 70%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ── Lightbox ────────────────────────────────────────── */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.92);
+  z-index: 1000;
+  cursor: zoom-out;
+  align-items: center;
+  justify-content: center;
+}
+#lightbox.active { display: flex; }
+#lightbox img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+  pointer-events: none;
+  box-shadow: 0 8px 60px rgba(0,0,0,.6);
+}
+</style>
+</head>
+<body>
+
+<!-- ── Nav ──────────────────────────────────────────── -->
+<nav>
+  <a href="index.html" class="nav-logo">Serena</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About Me</a>
+    <a href="page-work.html" class="active">Work</a>
+    <a href="index.html" onclick="sessionStorage.setItem('openContact','1')">Contact</a>
+    <a href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     SPREAD 1 — Title + data info right
+     ══════════════════════════════════════════ -->
+<div class="spread">
+  <div class="page-left">
+    <p class="project-meta">GGR372 &nbsp;·&nbsp; Lab 2</p>
+    <div class="project-num">Toronto<br>Healthcare<br>Access</div>
+
+    <p class="project-body">
+      This project maps and analyses the spatial distribution of
+      Shoppers Drug Mart pharmacies, physician offices, and hospitals
+      across Toronto. Using Kernel Density Estimation, it examines
+      how healthcare accessibility varies across the city's
+      neighbourhoods.
+    </p>
+    <p class="project-body" style="color:var(--subtle);">
+      Data were sourced from the Ontario GeoHub and projected in
+      NAD 1983 UTM Zone 17N for accurate spatial measurement
+      across the study area.
+    </p>
+
+    <div class="rq-box">
+      <p>"Are pharmacies and physicians equitably distributed across Toronto?"</p>
+    </div>
+
+    <div class="data-info">
+      <p><strong>Data Source</strong> &nbsp; Ontario GeoHub</p>
+      <p><strong>Projection</strong> &nbsp; NAD 1983 UTM Zone 17N</p>
+      <p><strong>Tools</strong> &nbsp; ArcGIS Pro — XY Table To Point, Kernel Density</p>
+      <p><strong>Course</strong> &nbsp; GGR372, University of Toronto</p>
+    </div>
+  </div>
+
+  <div class="page-right">
+    <img src="Toronto.svg" alt="Toronto road network">
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SPREAD 1b — Full-bleed map
+     ══════════════════════════════════════════ -->
+<div class="spread-full" data-full="map.jpg">
+  <img src="map.jpg" alt="Toronto Healthcare Access Map">
+</div>
+
+<!-- ══════════════════════════════════════════
+     SPREAD 2 — Methodology left + right
+     ══════════════════════════════════════════ -->
+<div class="spread">
+  <div class="page-left">
+    <p class="project-meta">Methodology</p>
+    <h2 class="project-title">Data Processing<br>&amp; Density Analysis</h2>
+
+    <div class="method-block">
+      <p class="method-title">Geocoding Challenge</p>
+      <p class="method-body">
+        Standard address-based geocoding was not viable — the
+        <code>ADDRESS_Toronto</code> and physician datasets used
+        inconsistent address field formats, with no shared
+        address key between tables. The only reliable common
+        fields were X and Y coordinates.
+      </p>
+      <p class="method-body" style="margin-top:10px;">
+        The solution was to bypass geocoding entirely and use
+        ArcGIS Pro's <code>XY Table To Point</code> tool to
+        convert coordinate columns directly into point features.
+        Coordinate systems were then manually verified and map
+        extents confirmed to ensure all points fell within the
+        correct study area — a critical quality check when working
+        with raw coordinate data.
+      </p>
+    </div>
+  </div>
+
+  <div class="page-right text-right">
+    <p class="project-meta">Methodology &nbsp;·&nbsp; Continued</p>
+    <h2 class="project-title">Kernel Density<br>Estimation</h2>
+
+    <div class="method-block">
+      <p class="method-title">Density Analysis</p>
+      <p class="method-body">
+        Kernel Density Estimation was applied to the Shoppers
+        Drug Mart point layer, generating a continuous density
+        surface ranging from sparse to dense coverage.
+        The resulting raster was overlaid with hospital locations
+        (red cross symbols) and physician office points (black
+        dots) to enable direct multi-layer spatial comparison
+        across a single map frame.
+      </p>
+      <p class="method-body" style="margin-top:10px;">
+        The bandwidth parameter was calibrated to reflect a
+        walkable service radius, ensuring the density surface
+        captures neighbourhood-scale accessibility patterns
+        rather than regional-scale aggregations.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SPREAD 3 — Findings left + conclusion right
+     ══════════════════════════════════════════ -->
+<div class="spread">
+  <div class="page-left">
+    <p class="project-meta">Key Findings</p>
+    <h2 class="project-title">Spatial Patterns<br>of Access</h2>
+
+    <div class="finding-block">
+      <span class="finding-label">Pharmacies (Shoppers Drug Mart)</span>
+      <p class="finding-body">
+        Pharmacy distribution is relatively uniform across Toronto,
+        with the highest density concentrated along Yonge Street
+        in the city centre. Secondary clusters appear along
+        Eglinton Avenue West, and stable coverage extends along
+        both sides of Highway 401. This pattern suggests that
+        Shoppers' site-selection strategy broadly reflects
+        population distribution, resulting in comparatively
+        equitable citywide accessibility.
+      </p>
+    </div>
+
+    <div class="finding-block">
+      <span class="finding-label">Physician Offices</span>
+      <p class="finding-body">
+        Physician offices exhibit a pronounced corridor dependency,
+        clustering along major arterials — Yonge, Bloor, Sheppard,
+        Queen, and Eglinton. Communities located away from these
+        corridors face substantially reduced access. This spatial
+        pattern raises concerns about healthcare equity, as
+        residents in peripheral neighbourhoods bear a disproportionate
+        access burden.
+      </p>
+    </div>
+  </div>
+
+  <div class="page-right text-right">
+    <p class="project-meta">Conclusion</p>
+    <h2 class="project-title">Equity Gap in<br>Primary Care</h2>
+    <p class="method-body">
+      Pharmacy accessibility consistently exceeds physician
+      accessibility across Toronto. Outer-city communities face
+      greater exposure to "medical desert" conditions in primary
+      care — a gap that warrants attention in urban health
+      equity planning.
+    </p>
+  </div>
+</div>
+
+<!-- ── Lightbox ───────────────────────────────────────── -->
+<div id="lightbox">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+window.addEventListener('load', () => { document.body.style.opacity = '1'; });
+
+const lb    = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightbox-img');
+
+document.querySelectorAll('img.map-click').forEach(img => {
+  img.addEventListener('click', () => {
+    lbImg.src = img.dataset.full || img.src;
+    lb.classList.add('active');
+  });
+});
+document.querySelectorAll('.spread-full[data-full]').forEach(el => {
+  el.addEventListener('click', () => {
+    lbImg.src = el.dataset.full;
+    lb.classList.add('active');
+  });
+});
+lb.addEventListener('click', () => {
+  lb.classList.remove('active');
+  lbImg.src = '';
+});
+</script>
+
+</body>
+</html>

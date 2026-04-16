@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;700;900&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-*, *::before, *::after { cursor: none !important; }
 html { scroll-behavior: smooth; }
 
 :root {
@@ -24,47 +23,13 @@ body {
   font-family: 'Jost', sans-serif;
   color: var(--ink);
   overflow-x: hidden;
+  opacity: 0;
+  transition: opacity .3s ease;
 }
 
-/* ── Custom cursor: viewfinder ── */
-#cursor {
-  position: fixed;
-  top: 0; left: 0;
-  width: 34px; height: 34px;
-  margin: -17px 0 0 -17px;
-  pointer-events: none;
-  z-index: 9999;
-  will-change: transform;
-  transition: opacity .3s, width .25s ease, height .25s ease, margin .25s ease;
-}
-#cursor::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 3px; height: 3px;
-  background: var(--ink);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: opacity .2s;
-}
-#cursor.hovered {
-  width: 20px; height: 20px;
-  margin: -10px 0 0 -10px;
-}
-#cursor.hovered::before { opacity: 0; }
-
-.c-tl, .c-tr, .c-bl, .c-br {
-  position: absolute;
-  width: 9px; height: 9px;
-  transition: all .25s ease;
-}
-.c-tl { top: 0; left: 0;  border-top: 1.5px solid var(--ink); border-left: 1.5px solid var(--ink); }
-.c-tr { top: 0; right: 0; border-top: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); }
-.c-bl { bottom: 0; left: 0;  border-bottom: 1.5px solid var(--ink); border-left: 1.5px solid var(--ink); }
-.c-br { bottom: 0; right: 0; border-bottom: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); }
 
 /* ════════════════════════════════
-   NAV — shared across all pages
+   NAV
    ════════════════════════════════ */
 nav {
   position: fixed;
@@ -74,6 +39,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: var(--bg);
 }
 
 .nav-logo {
@@ -107,17 +73,32 @@ nav {
 .nav-links a.active { color: var(--ink); }
 
 /* ════════════════════════════════
-   HERO
+   HERO — fixed behind drawer
    ════════════════════════════════ */
 #hero {
-  min-height: 100svh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: clamp(80px,12vh,120px) clamp(24px,6vw,80px) clamp(48px,8vh,80px);
   gap: clamp(16px,2.5vh,24px);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
+
+/* Low-contrast wash overlay */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(247,246,244,0.38);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#hero > * { position: relative; z-index: 2; }
 
 .polaroid {
   background: var(--white);
@@ -126,10 +107,9 @@ nav {
     0 6px 20px rgba(0,0,0,0.09),
     0 20px 56px rgba(0,0,0,0.13),
     0 40px 80px rgba(0,0,0,0.07);
-  transition: transform .4s cubic-bezier(.25,.46,.45,.94), box-shadow .4s ease;
   cursor: default;
+  filter: contrast(0.88) brightness(1.04) saturate(0.85);
 }
-
 
 .polaroid-coords {
   position: absolute;
@@ -157,7 +137,6 @@ nav {
   height: 100%;
   object-fit: cover;
   display: block;
-  filter: contrast(1.1) brightness(0.95);
 }
 
 .artwork-wrap::after {
@@ -174,46 +153,22 @@ nav {
   mix-blend-mode: multiply;
 }
 
-.wuhan-label {
-  position: absolute;
-  bottom: 30px;
-  left: 0; right: 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(20px, 3vmin, 32px);
-  font-weight: 300;
-  letter-spacing: .06em;
-  color: #6B0000;
-  text-align: center;
-  z-index: 3;
-  pointer-events: none;
-}
-
 /* ════════════════════════════════
-   ABOUT
+   ABOUT — drawer slides over hero
    ════════════════════════════════ */
 #about {
   min-height: 100svh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-top: 1px solid var(--border);
-}
-
-@media (max-width: 720px) {
-  #about { grid-template-columns: 1fr; }
-}
-
-/* Left — text */
-.about-left {
-  padding: clamp(64px,10vh,100px) clamp(40px,5vw,72px);
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 0;
-  border-right: 1px solid var(--border);
-}
-
-@media (max-width: 720px) {
-  .about-left { border-right: none; border-bottom: 1px solid var(--border); }
+  padding: clamp(80px,12vh,120px) clamp(40px,10vw,200px);
+  background: var(--bg);
+  position: relative;
+  z-index: 10;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -8px 48px rgba(0,0,0,0.10);
+  margin-top: -28px;
 }
 
 /* Fade-in lines */
@@ -233,26 +188,51 @@ nav {
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 32px;
+  text-align: center;
 }
 
 .about-heading {
   font-family: 'Jost', sans-serif;
-  font-size: clamp(36px, 4.5vw, 58px);
+  font-size: clamp(48px, 7vw, 88px);
   font-weight: 900;
-  line-height: 1.05;
+  line-height: 1.0;
   color: #6ECAAA;
-  margin-bottom: 28px;
+  margin-bottom: 48px;
   letter-spacing: -.02em;
+  text-align: center;
 }
 
+/* Typewriter container */
 .about-body {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 16px;
+  font-size: clamp(17px, 1.5vw, 20px);
   font-weight: 400;
   line-height: 1.9;
   color: var(--ink);
-  max-width: 420px;
-  margin-bottom: 40px;
+  max-width: 680px;
+  margin-bottom: 56px;
+  text-align: left;
+}
+.about-body p { margin-bottom: .8em; }
+.about-list {
+  list-style: disc;
+  padding-left: 1.4em;
+  margin-bottom: 1.2em;
+}
+.about-list li { margin-bottom: .3em; }
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background: var(--ink);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink .7s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 .skills-label {
@@ -261,6 +241,7 @@ nav {
   text-transform: uppercase;
   color: #5a5a5a;
   margin-bottom: 16px;
+  text-align: center;
 }
 
 .skills-row {
@@ -268,6 +249,7 @@ nav {
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 48px;
+  justify-content: center;
 }
 
 .skill-tag {
@@ -284,6 +266,7 @@ nav {
   display: flex;
   gap: 20px;
   align-items: center;
+  justify-content: center;
 }
 
 .social-icon {
@@ -298,48 +281,6 @@ nav {
   width: 22px;
   height: 22px;
   fill: currentColor;
-}
-
-/* Right — photo */
-.about-right {
-  position: relative;
-  overflow: hidden;
-  min-height: 520px;
-  padding: clamp(24px,4vw,48px);
-  background: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.photo-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 532px;   /* 380 × 1.4 */
-}
-
-.about-right img {
-  width: 100%;
-  height: auto;
-  max-height: 728px;
-  object-fit: cover;
-  object-position: center top;
-  filter: contrast(1.08) brightness(0.97);
-  display: block;
-}
-
-/* Dither overlay on photo */
-.photo-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(circle, rgba(0,0,0,0.18) 0.5px, transparent 0.5px),
-    radial-gradient(circle, rgba(0,0,0,0.09) 0.5px, transparent 0.5px);
-  background-size: 2px 2px, 2px 2px;
-  background-position: 0 0, 1px 1px;
-  mix-blend-mode: multiply;
 }
 
 /* ════════════════════════════════
@@ -456,13 +397,14 @@ nav {
   color: var(--bg);
   border-color: var(--ink);
 }
+
 </style>
 </head>
 <body>
 
 <!-- ── Nav ────────────────────────────────────────────── -->
 <nav>
-  <a href="index.html" class="nav-logo">Yisi Xie</a>
+  <a href="index.html" class="nav-logo">Serena</a>
   <div class="nav-links">
     <a href="#hero">Home</a>
     <a href="#about">About Me</a>
@@ -477,7 +419,6 @@ nav {
   <div class="polaroid">
     <div class="artwork-wrap">
       <img src="Wuhan.svg" alt="Wuhan — Road Network">
-      <p class="wuhan-label">Wuhan</p>
       <p class="polaroid-coords">30.5789° N &nbsp;114.2921° E</p>
     </div>
   </div>
@@ -485,51 +426,40 @@ nav {
 
 <!-- ── About ──────────────────────────────────────────── -->
 <section id="about">
-
-  <!-- Left: text -->
-  <div class="about-left">
-    <p class="about-tag fade-line">About Me</p>
-    <h2 class="about-heading fade-line">Yisi Xie</h2>
-    <p class="about-body fade-line">
-      I'm a University of Toronto student studying Human Resources
-      with minors in GIS and Digital Humanities.
-    </p>
-    <p class="skills-label fade-line">Technical Skills</p>
-    <div class="skills-row">
-      <span class="skill-tag fade-line">R</span>
-      <span class="skill-tag fade-line">RStudio</span>
-      <span class="skill-tag fade-line">Python</span>
-      <span class="skill-tag fade-line">ArcGIS</span>
-      <span class="skill-tag fade-line">GitHub</span>
-      <span class="skill-tag fade-line">HTML</span>
-      <span class="skill-tag fade-line">CSS</span>
-      <span class="skill-tag fade-line">JavaScript</span>
-    </div>
-
-    <!-- Social icons: LinkedIn + Email only -->
-    <div class="social-row fade-line">
-      <!-- LinkedIn -->
-      <a class="social-icon" href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener" title="LinkedIn">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-      </a>
-      <!-- Email -->
-      <a class="social-icon" href="mailto:serenaxiee@outlook.com" title="Email">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
-        </svg>
-      </a>
-    </div>
+  <h2 class="about-heading fade-line">Yisi Xie</h2>
+  <div class="about-body" id="about-body">
+    <p id="tw-intro"></p>
+    <ul class="about-list fade-line">
+      <li>Obsessed with maps and the stories hidden inside spatial data</li>
+      <li>A University of Toronto student — Human Resources major, GIS minor</li>
+      <li>Building web maps and spatial analyses that make geographic patterns visible</li>
+      <li>A certified diver who finds structure both underwater and in datasets</li>
+    </ul>
+    <p class="fade-line">I turn geographic and urban data into interactive visualizations and spatial insights — from accessibility analysis to tree canopy equity mapping across Canadian cities.</p>
   </div>
-
-  <!-- Right: photo -->
-  <div class="about-right">
-    <div class="photo-wrap">
-      <img src="Yisi Xie.JPG" alt="Yisi Xie">
-    </div>
+  <p class="skills-label fade-line">Technical Skills</p>
+  <div class="skills-row">
+    <span class="skill-tag fade-line">R</span>
+    <span class="skill-tag fade-line">RStudio</span>
+    <span class="skill-tag fade-line">Python</span>
+    <span class="skill-tag fade-line">ArcGIS</span>
+    <span class="skill-tag fade-line">GitHub</span>
+    <span class="skill-tag fade-line">HTML</span>
+    <span class="skill-tag fade-line">CSS</span>
+    <span class="skill-tag fade-line">JavaScript</span>
   </div>
-
+  <div class="social-row fade-line">
+    <a class="social-icon" href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener" title="LinkedIn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+      </svg>
+    </a>
+    <a class="social-icon" href="mailto:serenaxiee@outlook.com" title="Email">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+      </svg>
+    </a>
+  </div>
 </section>
 
 <!-- ── Contact overlay ────────────────────────────────── -->
@@ -561,7 +491,19 @@ nav {
   </form>
 </div>
 
+<div id="cursor">
+  <span class="c-tl"></span>
+  <span class="c-tr"></span>
+  <span class="c-bl"></span>
+  <span class="c-br"></span>
+</div>
+
 <script>
+/* ── Page fade-in on load ── */
+window.addEventListener('load', () => {
+  document.body.style.opacity = '1';
+});
+
 /* ── Contact overlay ── */
 function openContact() {
   document.getElementById('contact-overlay').classList.add('open');
@@ -574,54 +516,51 @@ function closeContact() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeContact();
 });
-
-// Open contact if redirected from another page
 if (sessionStorage.getItem('openContact') === '1') {
   sessionStorage.removeItem('openContact');
   openContact();
 }
 
-/* ── Fade-in on scroll (IntersectionObserver) ── */
+/* ── Fade-in on scroll ── */
 const lines = document.querySelectorAll('.fade-line');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach((entry, i) => {
+const fadeObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
     if (entry.isIntersecting) {
-      // Stagger each line by its index among siblings
-      const siblings = [...entry.target.parentElement.querySelectorAll('.fade-line'),
-                        ...document.querySelectorAll('.skills-row .fade-line')];
       const allLines = document.querySelectorAll('.fade-line');
       const idx = [...allLines].indexOf(entry.target);
-      setTimeout(() => {
-        entry.target.classList.add('visible');
-      }, idx * 80);
-      observer.unobserve(entry.target);
+      setTimeout(() => entry.target.classList.add('visible'), idx * 80);
+      fadeObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.15 });
+lines.forEach(el => fadeObserver.observe(el));
 
-lines.forEach(el => observer.observe(el));
+/* ── Typewriter for "I am" ── */
+const introEl = document.getElementById('tw-intro');
+const introText = 'I am';
+let typed = false;
 
-/* ── Custom cursor: viewfinder ── */
-const cursor = document.getElementById('cursor');
-
-document.addEventListener('mousemove', e => {
-  cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-});
-
-document.querySelectorAll('a, button, [onclick], input, textarea').forEach(el => {
-  el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-  el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-});
-
-document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
-document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+const twObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !typed) {
+      typed = true;
+      twObserver.unobserve(entry.target);
+      let i = 0;
+      const cur = document.createElement('span');
+      cur.className = 'typewriter-cursor';
+      introEl.appendChild(cur);
+      const iv = setInterval(() => {
+        cur.insertAdjacentText('beforebegin', introText[i++]);
+        if (i >= introText.length) {
+          clearInterval(iv);
+          setTimeout(() => cur.remove(), 2500);
+        }
+      }, 80);
+    }
+  });
+}, { threshold: 0.4 });
+twObserver.observe(introEl);
 </script>
 
-<div id="cursor">
-  <span class="c-tl"></span>
-  <span class="c-tr"></span>
-  <span class="c-bl"></span>
-  <span class="c-br"></span>
-</div>
 </body>
 </html>

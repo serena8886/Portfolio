@@ -23,6 +23,8 @@ body {
   font-family: 'Jost', sans-serif;
   color: var(--ink);
   overflow-x: hidden;
+  opacity: 0;
+  transition: opacity .3s ease;
 }
 
 /* ── Nav ─────────────────────────────────────────────── */
@@ -34,6 +36,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: clamp(18px,3vh,28px) clamp(24px,4vw,52px);
+  background: var(--bg);
 }
 
 .nav-logo {
@@ -147,7 +150,9 @@ nav {
   color: var(--ink);
   line-height: 1.3;
   margin-bottom: 10px;
+  transition: color .2s;
 }
+.work-card:hover .card-title { color: #6ECAAA; }
 
 .card-desc {
   font-family: 'Cormorant Garamond', serif;
@@ -223,7 +228,7 @@ footer {
 
 <!-- ── Nav ──────────────────────────────────────────── -->
 <nav>
-  <a href="index.html" class="nav-logo">Yisi Xie</a>
+  <a href="index.html" class="nav-logo">Serena</a>
   <div class="nav-links">
     <a href="index.html">Home</a>
     <a href="index.html#about">About Me</a>
@@ -237,9 +242,9 @@ footer {
 <div class="work-grid">
 
   <!-- 01 Halifax LRT -->
-  <a class="work-card" href="Halifax.html">
+  <a class="work-card" href="Halifax/Halifax.html">
     <div class="card-thumb">
-      <img src="Halifax/mapit-export (1).svg" alt="Halifax LRT">
+      <img src="Halifax/Layout2.jpg" alt="Halifax LRT">
     </div>
     <div class="card-body">
       <p class="card-num">01</p>
@@ -256,9 +261,9 @@ footer {
   </a>
 
   <!-- 02 Toronto Shoppers Map -->
-  <a class="work-card" href="#">
+  <a class="work-card" href="Toronto Shoppers Map/Shoppers Drug Mart.html">
     <div class="card-thumb">
-      <img src="Toronto Shoppers Map/Layout2.jpg" alt="Toronto Shoppers Map">
+      <img src="Toronto Shoppers Map/map.jpg" alt="Toronto Shoppers Map">
     </div>
     <div class="card-body">
       <p class="card-num">02</p>
@@ -273,18 +278,20 @@ footer {
     </div>
   </a>
 
-  <!-- 03 Infanity Rate -->
-  <a class="work-card" href="#">
+  <!-- 03 Health Mapping & Spatial Cluster Analysis -->
+  <a class="work-card" href="Infanity Rate/Health Mapping.html">
     <div class="card-thumb">
-      <div class="card-thumb-placeholder"><span>Coming soon</span></div>
+      <img src="Infanity Rate/Infant Mortality Rates.jpg" alt="Health Mapping & Spatial Cluster Analysis">
     </div>
     <div class="card-body">
       <p class="card-num">03</p>
-      <h3 class="card-title">Infanity Rate</h3>
-      <p class="card-desc">Spatial and demographic analysis of infant mortality rates and their relationship to urban geography.</p>
+      <h3 class="card-title">Health Mapping &amp; Spatial Cluster Analysis</h3>
+      <p class="card-desc">Choropleth mapping of infant mortality rates across Ontario and LISA cluster analysis of child and senior road collision risks.</p>
       <div class="card-tags">
-        <span class="tag">Demographics</span>
+        <span class="tag">GIS</span>
         <span class="tag">Health Geography</span>
+        <span class="tag">LISA</span>
+        <span class="tag">Ontario</span>
       </div>
       <span class="card-arrow">View project</span>
     </div>
@@ -294,12 +301,17 @@ footer {
 
 <!-- ── Footer ───────────────────────────────────────── -->
 <footer>
-  <span class="footer-name">Yisi Xie, 2025</span>
+  <span class="footer-name">Serena, 2025</span>
   <div class="footer-links">
     <a href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener">LinkedIn</a>
     <a href="index.html">Home</a>
   </div>
 </footer>
 
+<script>
+window.addEventListener('load', () => {
+  document.body.style.opacity = '1';
+});
+</script>
 </body>
 </html>
