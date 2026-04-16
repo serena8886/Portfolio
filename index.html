@@ -130,13 +130,6 @@ nav {
   cursor: default;
 }
 
-.polaroid:hover {
-  transform: rotate(-1.5deg) translateY(-8px) scale(1.02);
-  box-shadow:
-    0 12px 32px rgba(0,0,0,0.12),
-    0 32px 72px rgba(0,0,0,0.16),
-    0 56px 100px rgba(0,0,0,0.09);
-}
 
 .polaroid-coords {
   position: absolute;
@@ -182,12 +175,17 @@ nav {
 }
 
 .wuhan-label {
+  position: absolute;
+  bottom: 30px;
+  left: 0; right: 0;
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(28px, 4vmin, 44px);
+  font-size: clamp(20px, 3vmin, 32px);
   font-weight: 300;
   letter-spacing: .06em;
-  color: var(--ink);
+  color: #6B0000;
   text-align: center;
+  z-index: 3;
+  pointer-events: none;
 }
 
 /* ════════════════════════════════
@@ -479,10 +477,10 @@ nav {
   <div class="polaroid">
     <div class="artwork-wrap">
       <img src="Wuhan.svg" alt="Wuhan — Road Network">
+      <p class="wuhan-label">Wuhan</p>
       <p class="polaroid-coords">30.5789° N &nbsp;114.2921° E</p>
     </div>
   </div>
-  <p class="wuhan-label">Wuhan</p>
 </section>
 
 <!-- ── About ──────────────────────────────────────────── -->
