@@ -4,34 +4,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Halifax LRT — Serena</title>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;700&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
 :root {
   --bg:     #f7f6f4;
-  --white:  #ffffff;
+  --paper:  #fbfaf7;
   --ink:    #1a1a1a;
-  --muted:  rgba(30,25,20,0.38);
-  --border: rgba(0,0,0,0.08);
-  --accent: #8a8680;
+  --warm:   #3d3830;
+  --muted:  rgba(30,25,20,0.72);
+  --hint:   rgba(30,25,20,0.55);
+  --rule:   rgba(0,0,0,0.22);
+  --pin:    #1a1a1a;
 }
 
 body {
   background: var(--bg);
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  padding: clamp(80px, 10vh, 120px) clamp(16px, 4vw, 40px) clamp(32px, 5vw, 60px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(32px, 5vw, 60px);
+  font-family: 'Jost', sans-serif;
+  color: var(--ink);
+  overflow-x: hidden;
+  padding-top: 80px;
   opacity: 0;
-  transition: opacity .3s ease;
+  transition: opacity .4s ease;
 }
 
-/* ── Nav ─────────────────────────────────────────────── */
+/* ── Nav (matches index.html) ────────────────────────── */
 nav {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -43,7 +42,7 @@ nav {
   background: var(--bg);
 }
 .nav-logo {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 17px;
   font-weight: 400;
   letter-spacing: .04em;
@@ -52,705 +51,639 @@ nav {
 }
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a {
-  font-size: 9px;
-  font-weight: 300;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--muted);
   text-decoration: none;
   transition: color .2s;
-  cursor: pointer;
-  border: none;
-  background: none;
-  font-family: 'Inter', sans-serif;
 }
-.nav-links a:hover,
-.nav-links a.active { color: var(--ink); }
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
 
-/* ── Book spread wrapper ─────────────────────────────── */
-.spread {
-  width: 100%;
-  max-width: 1100px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: var(--white);
-  box-shadow:
-    0 4px 6px rgba(0,0,0,.04),
-    0 12px 40px rgba(0,0,0,.10),
-    0 30px 80px rgba(0,0,0,.08);
-  position: relative;
-  border-radius: 2px 6px 6px 2px;
+/* ── Page header (field notebook stamp) ──────────────── */
+.page-header {
+  max-width: 980px;
+  margin: clamp(40px,6vh,80px) auto clamp(28px,4vh,48px);
+  padding: 0 clamp(20px,5vw,52px);
 }
-.spread::after {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%; width: 28px;
-  transform: translateX(-50%);
-  background: linear-gradient(to right,
-    transparent 0%, rgba(0,0,0,.03) 30%,
-    rgba(0,0,0,.07) 50%, rgba(0,0,0,.03) 70%, transparent 100%);
-  pointer-events: none;
-  z-index: 10;
-}
-@media (max-width: 640px) {
-  .spread { grid-template-columns: 1fr; border-radius: 4px; }
-  .spread::after { display: none; }
-}
-
-/* ── Left page ───────────────────────────────────────── */
-.page-left {
-  padding: clamp(32px,5vw,64px) clamp(24px,4vw,52px) clamp(32px,5vw,64px) clamp(24px,4vw,56px);
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid rgba(0,0,0,.06);
-  min-height: clamp(400px,55vw,640px);
-}
-@media (max-width: 640px) {
-  .page-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,.06); min-height: unset; }
-}
-
-.project-meta {
-  font-size: 9px;
-  font-weight: 300;
-  letter-spacing: .18em;
+.breadcrumb {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: .22em;
   text-transform: uppercase;
-  color: #b0aba4;
-  margin-bottom: 10px;
-  font-family: 'Inter', sans-serif;
+  color: var(--muted);
+  margin-bottom: clamp(32px,5vh,56px);
 }
-.project-num {
-  font-family: 'EB Garamond', serif;
-  font-size: clamp(64px,8vw,110px);
-  font-weight: 300;
-  line-height: 1;
-  color: var(--ink);
-  margin-bottom: clamp(24px,4vw,40px);
-  letter-spacing: -.02em;
+.breadcrumb a { color: var(--muted); text-decoration: none; transition: color .2s; }
+.breadcrumb a:hover { color: var(--ink); }
+.breadcrumb .sep { margin: 0 10px; color: var(--hint); }
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: 28px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--warm);
 }
-.project-title {
-  font-family: 'EB Garamond', serif;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--ink);
+.header-stamp {
+  border: 1px solid var(--warm);
+  padding: 4px 11px;
+  display: inline-block;
+  transform: rotate(-1.2deg);
+}
+.page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  margin-bottom: 8px;
+}
+.page-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(17px, 2vw, 22px);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--warm);
   line-height: 1.5;
   margin-bottom: 18px;
+  max-width: 720px;
 }
-.project-body {
-  font-family: 'EB Garamond', serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.9;
+.header-tags {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.header-tags span + span::before { content: ' · '; margin: 0 4px; color: var(--hint); }
+
+/* ── Annotated map section ───────────────────────────── */
+.annotated {
+  max-width: 980px;
+  margin: 0 auto clamp(40px,6vh,72px);
+  padding: 0 clamp(20px,5vw,52px);
+}
+.section-eyebrow {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.map-wrap {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow:
+    0 3px 8px rgba(0,0,0,0.06),
+    0 14px 36px rgba(0,0,0,0.09);
+}
+.map-wrap img {
+  width: 100%;
+  display: block;
+}
+.pin {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--pin);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4), 0 0 0 3px rgba(247,246,244,0.95);
+  transform: translate(-50%, -50%);
+  transition: transform .15s ease;
+}
+.pin:hover { transform: translate(-50%, -50%) scale(1.12); }
+
+.map-caption {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 14px;
+  text-align: center;
+}
+
+.pin-notes {
+  margin-top: clamp(28px,4vh,40px);
+}
+.pin-note {
+  display: flex;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 0.5px solid var(--rule);
+}
+.pin-note:first-child { border-top: 0; padding-top: 0; }
+.pin-note:last-child { border-bottom: 0.5px solid var(--rule); }
+.pin-num {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--pin);
+  color: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+.pin-note-body { flex: 1; }
+.pin-note-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--warm);
+  margin-right: 10px;
+}
+.pin-note-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  line-height: 1.7;
   color: var(--ink);
-  max-width: 280px;
-  margin-bottom: 28px;
 }
+
+/* ── Field journal section ───────────────────────────── */
+.journal {
+  max-width: 980px;
+  margin: 0 auto clamp(40px,6vh,72px);
+  padding: 0 clamp(20px,5vw,52px);
+}
+.journal-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: clamp(28px,4vw,52px);
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .journal-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* Left margin: observations, sketches, surprises */
+.margin-col {
+  border-right: 1px solid var(--rule);
+  padding-right: clamp(16px,2vw,28px);
+}
+@media (max-width: 760px) {
+  .margin-col { border-right: 0; border-top: 1px solid var(--rule); padding-right: 0; padding-top: 18px; order: 2; }
+}
+.margin-block { margin-bottom: 28px; }
+.margin-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.margin-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--warm);
+}
+.margin-date {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: .15em;
+  color: var(--hint);
+  margin-top: 8px;
+}
+
+/* Sketch box (replace with real sketch later) */
+.sketch-box {
+  border-top: 0.5px dashed var(--rule);
+  border-bottom: 0.5px dashed var(--rule);
+  padding: 14px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--warm);
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+/* Main column: numbered sections */
+.main-col { padding-top: 4px; }
+.j-section { margin-bottom: clamp(28px,4vh,40px); }
+.j-section-num {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.j-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 500;
+  line-height: 1.25;
+  margin-bottom: 14px;
+  color: var(--ink);
+}
+.j-section-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--ink);
+}
+.j-section-body p + p { margin-top: 14px; }
+.j-section-body em { color: var(--warm); }
+.j-section-body sup {
+  font-size: 9px;
+  color: var(--warm);
+  margin-left: 1px;
+}
+
 .criteria-list {
   list-style: none;
-  margin-bottom: 28px;
+  margin: 14px 0;
+  padding: 14px 0;
+  border-top: 0.5px solid var(--rule);
+  border-bottom: 0.5px solid var(--rule);
 }
 .criteria-list li {
-  font-family: 'EB Garamond', serif;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--ink);
-  line-height: 1.9;
-  padding-left: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 4px 0 4px 18px;
   position: relative;
+  color: var(--ink);
 }
 .criteria-list li::before {
   content: '—';
   position: absolute;
   left: 0;
-  color: #b0aba4;
-  font-size: 11px;
+  color: var(--hint);
 }
-.section-label {
-  font-size: 9px;
-  font-weight: 300;
+.criteria-list li b {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
   letter-spacing: .18em;
   text-transform: uppercase;
-  color: #8a8680;
-  margin-bottom: 10px;
-  font-family: 'Inter', sans-serif;
-  display: block;
+  font-weight: 500;
+  color: var(--warm);
+  margin-right: 8px;
 }
-.project-location {
-  margin-top: auto;
-  font-family: 'EB Garamond', serif;
-  font-size: 12px;
-  font-weight: 300;
-  font-style: italic;
-  color: #8a8680;
-  line-height: 1.8;
-  text-align: right;
-}
-.location-label {
-  font-style: normal;
-  font-size: 9px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 6px;
-}
-
-/* ── Right page ──────────────────────────────────────── */
-.page-right {
-  position: relative;
-  overflow: hidden;
-  min-height: clamp(300px,50vw,640px);
-}
-@media (max-width: 640px) { .page-right { min-height: 60vw; } }
-.page-right img,
-.page-right embed,
-.page-right iframe {
-  position: absolute;
-  inset: 0 24px;
-  width: calc(100% - 48px);
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-.page-right img.map-click {
-  cursor: zoom-in;
-  transition: opacity .2s;
-}
-.page-right img.map-click:hover { opacity: .85; }
-
-/* ── Right page text variant ─────────────────────────── */
-.page-right.text-right {
-  position: static;
-  overflow: visible;
-  padding: clamp(32px,5vw,64px) clamp(24px,4vw,52px) clamp(32px,5vw,64px) clamp(24px,4vw,40px);
-  display: flex;
-  flex-direction: column;
-}
-.page-right.text-right img,
-.page-right.text-right embed,
-.page-right.text-right iframe {
-  position: static;
-  inset: unset;
-  width: unset;
-  height: unset;
-  object-fit: unset;
-}
-
-/* ── Full-bleed spread ───────────────────────────────── */
-.spread-full {
-  width: 100%;
-  max-width: 1100px;
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 4px 6px rgba(0,0,0,.04),
-    0 12px 40px rgba(0,0,0,.10),
-    0 30px 80px rgba(0,0,0,.08);
-  border-radius: 2px 6px 6px 2px;
-  cursor: zoom-in;
-}
-.spread-full img { width: 100%; display: block; transition: opacity .2s; }
-.spread-full:hover img { opacity: .85; }
-.spread-full::after {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%; width: 28px;
-  transform: translateX(-50%);
-  background: linear-gradient(to right,
-    transparent 0%, rgba(0,0,0,.04) 30%,
-    rgba(0,0,0,.09) 50%, rgba(0,0,0,.04) 70%, transparent 100%);
-  pointer-events: none;
-}
-
-/* ── Pull quote ──────────────────────────────────────── */
-.page-left.quote-page { justify-content: center; }
-.pull-quote {
-  font-family: 'EB Garamond', serif;
+.criteria-list li {
   font-size: 16px;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--ink);
-  line-height: 2;
-  max-width: 280px;
+}
+
+/* Supporting figure inside main column */
+.j-figure {
+  margin: 22px 0;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 14px;
+  border-radius: 2px;
+}
+.j-figure img { width: 100%; display: block; }
+.j-figure figcaption {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 10px;
+  text-align: center;
+}
+.j-figure figcaption b {
+  font-weight: 500;
+  color: var(--warm);
+  margin-right: 6px;
+}
+
+/* ── References ──────────────────────────────────────── */
+.refs {
+  max-width: 980px;
+  margin: 0 auto clamp(48px,7vh,96px);
+  padding: clamp(28px,4vh,40px) clamp(20px,5vw,52px) 0;
+  border-top: 1px solid var(--ink);
+}
+.refs-heading {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--warm);
   margin-bottom: 16px;
 }
-.quote-attr {
-  font-size: 9px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: #8a8680;
-  font-family: 'Inter', sans-serif;
+.refs ol {
+  list-style: none;
+  counter-reset: ref;
 }
-
-/* ── Workflow flowchart ──────────────────────────────── */
-.workflow {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 24px;
-  margin-bottom: 28px;
-}
-.wf-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
+.refs li {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  line-height: 1.75;
+  padding: 8px 0 8px 32px;
   position: relative;
+  color: var(--ink);
+  counter-increment: ref;
 }
-.wf-step + .wf-step::before {
-  content: '';
+.refs li::before {
+  content: counter(ref);
   position: absolute;
-  top: -12px; left: 15px;
-  width: 1px; height: 12px;
-  background: var(--accent);
-  opacity: .4;
+  left: 0;
+  top: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: .1em;
+  color: var(--muted);
+  font-style: normal;
 }
-.wf-num {
-  flex-shrink: 0;
-  width: 30px; height: 30px;
-  border: 1px solid var(--accent);
-  border-radius: 50%;
+.refs li i { color: var(--warm); }
+.refs li a { color: var(--warm); text-decoration: none; border-bottom: 0.5px solid var(--rule); }
+.refs li a:hover { border-bottom-color: var(--ink); color: var(--ink); }
+
+.footer-row {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 clamp(20px,5vw,52px) clamp(40px,6vh,80px);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  color: var(--accent);
-  letter-spacing: .08em;
-  margin-top: 2px;
-}
-.wf-text {
-  padding-bottom: 14px;
-}
-.wf-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin-bottom: 3px;
-}
-.wf-desc {
-  font-family: 'EB Garamond', serif;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'Jost', sans-serif;
   font-size: 12px;
-  font-weight: 400;
-  color: #8a8680;
-  line-height: 1.6;
-}
-
-/* ── Classification table ────────────────────────────── */
-.class-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 24px;
-  font-family: 'EB Garamond', serif;
-}
-.class-table th {
-  font-size: 8px;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: .16em;
+  letter-spacing: .2em;
   text-transform: uppercase;
-  color: #8a8680;
-  font-weight: 300;
-  padding: 6px 10px;
-  text-align: left;
-  border-bottom: 1px solid rgba(0,0,0,.08);
+  color: var(--muted);
 }
-.class-table td {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--ink);
-  padding: 7px 10px;
-  border-bottom: 1px solid rgba(0,0,0,.04);
-  line-height: 1.5;
-}
-.class-table td:last-child {
-  color: #8a8680;
-  font-style: italic;
-}
-
-/* ── Method / finding blocks ─────────────────────────── */
-.method-block { margin-bottom: 28px; }
-.method-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin-bottom: 8px;
-}
-.method-body {
-  font-family: 'EB Garamond', serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.85;
-  color: var(--ink);
-  max-width: 280px;
-}
-.finding-block { margin-bottom: 24px; }
-.finding-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: #8a8680;
-  margin-bottom: 6px;
-  display: block;
-}
-.finding-body {
-  font-family: 'EB Garamond', serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.85;
-  color: var(--ink);
-  max-width: 280px;
-}
-
-/* ── Discussion boxes ────────────────────────────────── */
-.discuss-block {
-  margin-bottom: 20px;
-}
-.discuss-label {
-  font-size: 8px;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: #8a8680;
-  margin-bottom: 6px;
-  display: block;
-}
-.discuss-body {
-  font-family: 'EB Garamond', serif;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.85;
-  color: var(--ink);
-  max-width: 280px;
-}
-
-/* ── Lightbox ────────────────────────────────────────── */
-#lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.92);
-  z-index: 1000;
-  cursor: zoom-out;
-  align-items: center;
-  justify-content: center;
-}
-#lightbox.active { display: flex; }
-#lightbox img {
-  max-width: 92vw;
-  max-height: 92vh;
-  object-fit: contain;
-  pointer-events: none;
-  box-shadow: 0 8px 60px rgba(0,0,0,.6);
-}
+.footer-row a { color: var(--muted); text-decoration: none; border-bottom: 0.5px solid var(--rule); padding-bottom: 2px; transition: color .2s; }
+.footer-row a:hover { color: var(--ink); }
 </style>
 </head>
 <body>
 
-<!-- ── Nav ──────────────────────────────────────────── -->
 <nav>
   <a href="../index.html" class="nav-logo">Serena</a>
   <div class="nav-links">
-    <a href="../index.html">Home</a>
-    <a href="../index.html#about">About Me</a>
+    <a href="../index.html#hero">Home</a>
+    <a href="../index.html#about">About</a>
     <a href="../page-work.html" class="active">Work</a>
-    <a href="../index.html" onclick="sessionStorage.setItem('openContact','1')">Contact</a>
     <a href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener">LinkedIn</a>
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════
-     SPREAD 1 — Title + text right
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <div class="project-num">Halifax</div>
-    <h2 class="project-title">Light Rail Transit Proposal</h2>
-    <p class="project-body">
-      A GIS-based multi-criteria analysis identifying an optimal
-      Light Rail Transit corridor connecting suburban Halifax to
-      the downtown train station. Using ArcGIS Pro, an impedance
-      surface was constructed from terrain, hydrology, wetland
-      sensitivity, commuter density, and existing bus network
-      proximity across the Halifax Regional Municipality.
-    </p>
-    <p class="project-body" style="color:#8a8680;font-style:italic;">
-      Research confirms that daily commute time is negatively
-      correlated with wellbeing — private car commuters report
-      the highest stress levels — making predictable, rapid
-      transit a meaningful quality-of-life intervention.
-      <span style="display:block;margin-top:4px;font-size:11px;">— Chatterjee et al., 2020</span>
-    </p>
+<!-- ── Page header ─────────────────────────────────────── -->
+<header class="page-header">
+  <div class="breadcrumb">
+    <a href="../page-work.html">Work</a>
+    <span class="sep">/</span>
+    Halifax LRT
+  </div>
+  <div class="header-row">
+    <div class="header-stamp">2026 — Field Notebook</div>
+    <div>Project · Halifax, Nova Scotia</div>
+  </div>
+  <h1 class="page-title">Least Cost Path Analysis</h1>
+  <p class="page-subtitle">A proposed Light Rail Transit route through the Halifax Regional Municipality — and what its alignment quietly reveals about the city already built.</p>
+  <div class="header-tags">
+    <span>GGR273</span><span>Independent project</span><span>ArcGIS Pro</span><span>2026</span>
+  </div>
+</header>
 
-    <span class="section-label">Impedance Criteria</span>
-    <ul class="criteria-list">
-      <li>Terrain slope (LiDAR DEM)</li>
-      <li>Distance to water bodies</li>
-      <li>Distance to wetlands</li>
-      <li>Commuter density by dissemination area</li>
-      <li>Proximity to existing transit routes</li>
-    </ul>
+<!-- ── Annotated map (Idea 3) ──────────────────────────── -->
+<section class="annotated">
+  <div class="section-eyebrow">The map · five readings</div>
+  <div class="map-wrap">
+    <!--
+      IMAGE NOTE: replace Layout3.jpg if a different map should be the hero.
+      Pin positions are approximate — adjust left/top % to match your actual map.
+    -->
+    <img src="Layout3.jpg" alt="Halifax LRT route comparison map — Route 1 (Part 1 LCP) versus Route 2 (with bus-route proximity).">
+    <div class="pin" style="left: 35.3%; top: 5.6%;" title="Origin">1</div>
+    <div class="pin" style="left: 25.1%; top: 26.4%;" title="Bedford Basin">2</div>
+    <div class="pin" style="left: 36.0%; top: 40.0%;" title="Route divergence">3</div>
+    <div class="pin" style="left: 52.1%; top: 55.6%;" title="Bus corridor overlap">4</div>
+    <div class="pin" style="left: 70.3%; top: 46.9%;" title="Destination">5</div>
+  </div>
+  <div class="map-caption">Comparison of Route 1 (original LCP) and Route 2 (after adding bus-route proximity).</div>
 
-    <div class="project-location" style="margin-top:auto;">
-      <span class="location-label">Location</span>
-      Halifax Regional Municipality<br>Nova Scotia, Canada
+  <div class="pin-notes">
+    <div class="pin-note">
+      <div class="pin-num">1</div>
+      <div class="pin-note-body">
+        <span class="pin-note-label">Origin</span>
+        <span class="pin-note-text">The suburban source point northwest of Bedford Basin — a low-density area where current transit options thin out and commute times to downtown climb.</span>
+      </div>
     </div>
-  </div>
-  <div class="page-right">
-    <img src="Halifax.svg" alt="Halifax road network">
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD 2 — Workflow steps 1–3 + 4–6
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <p class="project-meta" style="color:var(--ink);font-weight:400;">Methodology &nbsp;·&nbsp; Six-Step Workflow</p>
-    <h2 class="project-title">From Raw Data<br>to Optimal Route</h2>
-    <p class="project-body">
-      Each analysis stage transformed source datasets into a
-      unified impedance surface, from which the least cost path
-      algorithm identified the corridor of minimum resistance
-      between origin and destination.
-    </p>
-    <div class="workflow">
-      <div class="wf-step">
-        <div class="wf-num">01</div>
-        <div class="wf-text">
-          <p class="wf-title">Data Collection</p>
-          <p class="wf-desc">LiDAR DEM, Census DA commuter data, HRM hydrology &amp; wetland polygons, Halifax Transit GTFS routes</p>
-        </div>
+    <div class="pin-note">
+      <div class="pin-num">2</div>
+      <div class="pin-note-body">
+        <span class="pin-note-label">Bedford Basin</span>
+        <span class="pin-note-text">Both routes bend around the basin rather than crossing it — water bodies were assigned the highest impedance values in the cost surface, treating them as absolute barriers.</span>
       </div>
-      <div class="wf-step">
-        <div class="wf-num">02</div>
-        <div class="wf-text">
-          <p class="wf-title">Criteria Raster</p>
-          <p class="wf-desc">Each factor converted to 10 m resolution raster via Feature to Raster or Euclidean Distance tools</p>
-        </div>
+    </div>
+    <div class="pin-note">
+      <div class="pin-num">3</div>
+      <div class="pin-note-body">
+        <span class="pin-note-label">Where the two routes diverge</span>
+        <span class="pin-note-text">The only meaningful difference. Route 2 (Part 2) hugs an existing Halifax Transit corridor here; Route 1 (Part 1) cuts through a slightly lower-density gap — visibly cheaper on the impedance surface, but stranded from transfers.</span>
       </div>
-      <div class="wf-step">
-        <div class="wf-num">03</div>
-        <div class="wf-text">
-          <p class="wf-title">Reclassification</p>
-          <p class="wf-desc">Reclassify tool applied to each raster; high-risk cells (steep slopes, open water) assigned maximum impedance</p>
-        </div>
+    </div>
+    <div class="pin-note">
+      <div class="pin-num">4</div>
+      <div class="pin-note-body">
+        <span class="pin-note-label">Bus corridor overlap</span>
+        <span class="pin-note-text">From here south, both routes share alignment with established bus corridors — which is also the finding: the bus network already lives in the low-impedance band.</span>
+      </div>
+    </div>
+    <div class="pin-note">
+      <div class="pin-num">5</div>
+      <div class="pin-note-body">
+        <span class="pin-note-label">Destination</span>
+        <span class="pin-note-text">Downtown Halifax train station — the chosen terminus, supporting multimodal transfer between LRT, regional rail, and the existing bus network.</span>
       </div>
     </div>
   </div>
-  <div class="page-right text-right">
-    <p class="project-meta" style="color:var(--ink);font-weight:400;">Methodology &nbsp;·&nbsp; Continued</p>
-    <div class="workflow" style="margin-top:0;">
-      <div class="wf-step">
-        <div class="wf-num">04</div>
-        <div class="wf-text">
-          <p class="wf-title">Impedance Surface</p>
-          <p class="wf-desc">Rasters summed into Raster_TOTAL (value range 125–17,025); low values = favourable corridor</p>
+</section>
+
+<!-- ── Field journal (Idea 1) ──────────────────────────── -->
+<section class="journal">
+  <div class="section-eyebrow">Field journal · the process</div>
+  <div class="journal-grid">
+
+    <aside class="margin-col">
+      <div class="margin-block">
+        <div class="margin-label">Observation</div>
+        <div class="margin-text">"Most planning asks where to build. Least cost path asks where not to — and that's a more honest question."</div>
+        <div class="margin-date">22 January 2026</div>
+      </div>
+
+      <div class="margin-block">
+        <div class="margin-label">Sketch</div>
+        <div class="sketch-box">/ impedance stack /
+─── slope
+─── lakes
+─── wetlands
+─── commuters
+═══ Σ = Raster_TOTAL</div>
+        <div class="margin-date">8 February</div>
+      </div>
+
+      <div class="margin-block">
+        <div class="margin-label">Note to self</div>
+        <div class="margin-text">Equal weighting feels wrong. Slope and commuter density shouldn't matter the same amount — terrain is a hard constraint, demand is a soft one.</div>
+        <div class="margin-date">25 February</div>
+      </div>
+
+      <div class="margin-block">
+        <div class="margin-label">Surprise</div>
+        <div class="margin-text">Part 2 route barely moved. The existing bus network is already in the low-impedance corridor. The buses got there first — the math just confirmed it.</div>
+        <div class="margin-date">21 March</div>
+      </div>
+
+      <div class="margin-block">
+        <div class="margin-label">Open question</div>
+        <div class="margin-text">If the model and the existing network agree, who is the model serving — the planner, or the citation in the report?</div>
+        <div class="margin-date">2 April</div>
+      </div>
+    </aside>
+
+    <div class="main-col">
+      <div class="j-section">
+        <div class="j-section-num">01 · Brief</div>
+        <div class="j-section-title">A route between two places, threaded through everything in between</div>
+        <div class="j-section-body">
+          <p>This project was commissioned to generate a Least Cost Path (LCP) for a proposed Light Rail Transit (LRT) route connecting a suburban origin to the downtown Halifax train station, using a multi-criteria impedance surface in ArcGIS Pro.</p>
+          <p>The case for new transit in Halifax is grounded in commuter wellbeing research: long, congested, car-dependent commutes are associated with reduced life satisfaction and elevated stress, while reliable rail service measurably reduces commute-related strain<sup>1</sup>. The route, in other words, isn't only about engineering — it's about who gets back twenty minutes of their day.</p>
         </div>
       </div>
-      <div class="wf-step">
-        <div class="wf-num">05</div>
-        <div class="wf-text">
-          <p class="wf-title">Cost Distance</p>
-          <p class="wf-desc">Cost Distance tool generates accumulated cost surface from origin point across the impedance raster</p>
+
+      <div class="j-section">
+        <div class="j-section-num">02 · Method — Part 1</div>
+        <div class="j-section-title">Building an impedance surface from four criteria</div>
+        <div class="j-section-body">
+          <p>The cost surface was constructed from four criteria, each reclassified into impedance values and combined in the Raster Calculator:</p>
+          <ul class="criteria-list">
+            <li><b>Slope</b>Generated from the LiDAR DEM with the Slope tool, then reclassified — flatter terrain received lower cost, reflecting suitability for rail construction.</li>
+            <li><b>Water bodies</b>Euclidean Distance rasters from lakes (polygon) and rivers (line) in the Nova Scotia Water dataset. Water itself was assigned the maximum impedance to prevent crossings.</li>
+            <li><b>Wetlands</b>Same approach — Euclidean Distance, reclassified to discourage construction near sensitive features.</li>
+            <li><b>Commuter density</b>COM_DRIVER + COM_PASS from Census Dissemination Areas, converted to raster via Feature to Raster. Denser commuter areas received lower cost, prioritizing demand.</li>
+          </ul>
+          <p>The combined surface (<em>Raster_TOTAL</em>) ranged from 125 to 17,025. Cost Distance and Cost Path tools — with the suburban origin as source and downtown station as destination — produced the route, converted to a polyline via Raster to Polyline.</p>
         </div>
       </div>
-      <div class="wf-step">
-        <div class="wf-num">06</div>
-        <div class="wf-text">
-          <p class="wf-title">LCP Output</p>
-          <p class="wf-desc">Cost Path → Raster to Polyline extracts the least cost path as a mappable vector corridor</p>
+
+      <div class="j-section">
+        <div class="j-section-num">03 · Expansion — Part 2</div>
+        <div class="j-section-title">Adding the network that already exists</div>
+        <div class="j-section-body">
+          <p>The original model treated LRT as if it would exist in isolation. But the literature on service-oriented transit makes a clear case that integration between modes — letting riders transfer easily between LRT and bus — drives ridership more than improvements to any single mode<sup>4</sup>. The Halifax Rapid Transit Strategy explicitly calls for corridor coordination<sup>2</sup>.</p>
+          <p>I added a fifth criterion: proximity to existing Halifax Transit bus routes, drawn from the HRM Open Data Portal<sup>3</sup>. Distance from the nearest bus route was reclassified into four bands:</p>
+          <ul class="criteria-list">
+            <li><b>0 – 200 m</b>Desirable (impedance 25)</li>
+            <li><b>200 – 500 m</b>Good (100)</li>
+            <li><b>500 – 1,000 m</b>Undesirable (500)</li>
+            <li><b>&gt; 1,000 m</b>Highly undesirable (2,000)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="j-section">
+        <div class="j-section-num">04 · Finding</div>
+        <div class="j-section-title">The route barely moved — and that <em>is</em> the finding</div>
+        <div class="j-section-body">
+          <p>The Part 2 route differed only slightly from Part 1. Read shallowly, that's a null result: adding a fifth criterion didn't change the answer. Read more carefully, it's the conclusion.</p>
+          <p>Existing bus corridors already align with low-impedance terrain. The model and the bus network — produced by different processes, decades apart — arrived independently at the same answer. Either Halifax's bus planners already understood the terrain the model is now describing, or the city's geography is constraining enough that any rational network would converge on the same corridor.</p>
+          <p>For the proposal, that means Route 2 is the recommended alignment: not because it's substantially different, but because it makes the multimodal integration argument <em>visible</em>.</p>
+        </div>
+      </div>
+
+      <div class="j-section">
+        <div class="j-section-num">05 · Limitations</div>
+        <div class="j-section-title">What this model didn't see</div>
+        <div class="j-section-body">
+          <p>Three honest caveats. <em>First</em>, all criteria were equally weighted. In transit planning practice, hard constraints (water, slope) should likely outrank soft signals (commuter density), and the equal-weight surface flattens that hierarchy.</p>
+          <p><em>Second</em>, the model excludes land use, expropriation cost, and environmental review beyond water bodies and wetlands — all of which determine whether a proposed alignment is actually buildable.</p>
+          <p><em>Third</em>, both routes are corridors, not station plans. A real LRT proposal would require station-spacing analysis as a separate layer — placed where the corridor passes through ridership generators, not at evenly spaced intervals along the line.</p>
         </div>
       </div>
     </div>
+
   </div>
-</div>
+</section>
 
-<!-- ══════════════════════════════════════════
-     SPREAD 2b — Full-bleed Part 1 LCP map
-     ══════════════════════════════════════════ -->
-<div class="spread-full" data-full="Layout1.jpg">
-  <img src="Layout1.jpg" alt="Part 1 — Original LCP Route">
-</div>
+<!-- ── References ──────────────────────────────────────── -->
+<section class="refs">
+  <div class="refs-heading">References</div>
+  <ol>
+    <li>Chatterjee, K., Chng, S., Clark, B., Davis, A., De Vos, J., Ettema, D., Handy, S., Martin, A., &amp; Reardon, L. (2020). Commuting and wellbeing: A critical overview of the literature with implications for policy and future research. <i>Transport Reviews</i>, 40(1), 5–34. <a href="https://doi.org/10.1080/01441647.2019.1649317" target="_blank" rel="noopener">doi.org/10.1080/01441647.2019.1649317</a></li>
+    <li>Halifax Regional Municipality. (2020). <i>Halifax rapid transit strategy</i>. <a href="https://www.halifax.ca/transportation/transportation-projects/transforming-transit" target="_blank" rel="noopener">halifax.ca/transportation/transforming-transit</a></li>
+    <li>Halifax Regional Municipality. <i>Transit bus routes</i> [GIS dataset]. Halifax Data, Mapping &amp; Analytics Hub. <a href="https://data-hrm.hub.arcgis.com/datasets/69adb7a88a4e4343bf5ae7c381f2d9af_0/explore" target="_blank" rel="noopener">data-hrm.hub.arcgis.com</a></li>
+    <li>Liu, X., Schmöcker, J.-D., Zhao, J., &amp; Yang, X. (2025). How to make service better? A review on developing service-oriented public transit systems. <i>Transport Reviews</i>, 45(5), 672–695. <a href="https://doi.org/10.1080/01441647.2025.2502629" target="_blank" rel="noopener">doi.org/10.1080/01441647.2025.2502629</a></li>
+  </ol>
+</section>
 
-<!-- ══════════════════════════════════════════
-     SPREAD 3 — Part 1 methodology + Part 2 intro
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <p class="project-meta" style="color:var(--ink);font-weight:400;">Part I &nbsp;·&nbsp; Original Analysis</p>
-    <h2 class="project-title">Four-Criteria<br>Impedance Surface</h2>
-    <p class="project-body">
-      The initial least cost path was derived from a composite
-      raster integrating four environmental and demographic
-      factors, with impedance values ranging from 125 to 17,025.
-    </p>
-
-    <span class="section-label">Methodology Detail</span>
-    <ul class="criteria-list" style="margin-bottom:20px;">
-      <li>Slope reclassified from LiDAR DEM via Slope tool (percent rise); steeper cells assigned higher impedance</li>
-      <li>Water bodies assigned maximum impedance to prevent route crossing hydrological features</li>
-      <li>Commuter variable: COM_DRIVER + COM_PASS via Census DA → Feature to Raster; high commuter density = low impedance</li>
-      <li>Euclidean distance to wetland polygons reclassified as sensitivity buffer</li>
-      <li>Raster_TOTAL value range: 125–17,025 across HRM study area</li>
-    </ul>
-
-    <span class="section-label">Tool Chain</span>
-    <ul class="criteria-list">
-      <li>Slope → Reclassify → Raster Calculator</li>
-      <li>Cost Distance → Cost Path → Raster to Polyline</li>
-    </ul>
-
-    <p class="project-body" style="max-width:280px;margin-top:auto;margin-bottom:0;color:#8a8680;">
-      Data source: Halifax Regional Municipality Open Data Portal.
-      Raster resolution: 10 m.
-    </p>
-  </div>
-  <div class="page-right text-right">
-    <p class="project-meta" style="color:var(--ink);font-weight:400;">Part II &nbsp;·&nbsp; Expanded Analysis</p>
-    <h2 class="project-title">Bus Network<br>Integration</h2>
-    <p class="project-body">
-      A fifth criterion — proximity to existing Halifax Transit bus
-      routes — was introduced as a multimodal connectivity layer.
-      Bus stop proximity was reclassified into four impedance bands
-      to reward alignment with established transit corridors.
-    </p>
-
-    <span class="section-label">Bus Stop Proximity Classification</span>
-    <table class="class-table">
-      <thead>
-        <tr>
-          <th>Distance to Stop</th>
-          <th>Impedance Value</th>
-          <th>Rating</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>0 – 200 m</td><td>25</td><td>Desirable</td></tr>
-        <tr><td>200 – 500 m</td><td>100</td><td>Good</td></tr>
-        <tr><td>500 – 1,000 m</td><td>500</td><td>Undesirable</td></tr>
-        <tr><td>&gt; 1,000 m</td><td>2,000</td><td>Highly Undesirable</td></tr>
-      </tbody>
-    </table>
-
-    <p class="project-body" style="max-width:280px;margin-top:auto;margin-bottom:0;color:#8a8680;">
-      Data source: Halifax Regional Municipality Open Data Portal.
-      Raster resolution: 10 m.
-    </p>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD 3b — Full-bleed impedance surface map
-     ══════════════════════════════════════════ -->
-<div class="spread-full" data-full="Layout2.jpg">
-  <img src="Layout2.jpg" alt="Part 2 — Expanded LCP with Bus Network">
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD 4 — Quote + Discussion
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left quote-page">
-    <p class="project-meta" style="color:var(--ink);font-weight:400;">Part II &nbsp;·&nbsp; Expanded Analysis</p>
-    <div style="margin-bottom:32px;margin-top:16px;">
-      <p class="pull-quote">
-        "Multimodal integration is not an
-        addendum to transit planning —
-        it is the condition upon which
-        a route earns its right of way."
-      </p>
-      <p class="quote-attr">— Halifax Rapid Transit Strategy, 2020</p>
-    </div>
-
-    <p class="project-body">
-      A fifth criterion — proximity to existing Halifax Transit bus
-      routes — was introduced as a multimodal connectivity layer.
-      Aligning the LRT corridor with established bus networks
-      reduces transfer distances and supports car-independent
-      urban mobility as outlined in Halifax's Rapid Transit Strategy.
-    </p>
-  </div>
-  <div class="page-right text-right">
-    <p class="project-meta" style="color:var(--ink);font-weight:400;">Discussion &nbsp;·&nbsp; Findings</p>
-    <h2 class="project-title">Evaluation &amp;<br>Recommendation</h2>
-
-    <div class="discuss-block">
-      <span class="discuss-label">Strengths</span>
-      <p class="discuss-body">
-        The proposed route avoids steep terrain and hydrologically
-        sensitive areas while prioritising high-commuter-density
-        corridors. Both Part 1 and Part 2 alignments demonstrate
-        strong spatial logic relative to the study area's geography.
-      </p>
-    </div>
-
-    <div class="discuss-block">
-      <span class="discuss-label">Limitations</span>
-      <p class="discuss-body">
-        Equal weighting across criteria may not reflect real planning
-        priorities. Land use, property acquisition costs, and
-        underground infrastructure were not incorporated. The model
-        treats all study-area cells as buildable, which overstates
-        routing flexibility.
-      </p>
-    </div>
-
-    <div class="discuss-block">
-      <span class="discuss-label">Recommendation</span>
-      <p class="discuss-body">
-        Part 2 and Part 1 routes are nearly identical — confirming
-        that the original model had already captured the dominant
-        low-impedance corridor. Part 2 is recommended, as its
-        explicit integration of bus network proximity aligns more
-        directly with Halifax's Rapid Transit Strategy goal of
-        multimodal, car-independent urban mobility.
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD 4b — Full-bleed route comparison map
-     ══════════════════════════════════════════ -->
-<div class="spread-full" data-full="Layout3.jpg">
-  <img src="Layout3.jpg" alt="Route 1 vs Route 2 Comparison">
-</div>
-
-<!-- ── Lightbox ───────────────────────────────────────── -->
-<div id="lightbox">
-  <img id="lightbox-img" src="" alt="">
+<div class="footer-row">
+  <a href="../page-work.html">← All work</a>
+  <a href="Indepedent_1_Yisi_Xie.pdf" target="_blank" rel="noopener">Read full report (PDF) ↗</a>
 </div>
 
 <script>
-window.addEventListener('load', () => { document.body.style.opacity = '1'; });
-
-const lb    = document.getElementById('lightbox');
-const lbImg = document.getElementById('lightbox-img');
-
-document.querySelectorAll('img.map-click').forEach(img => {
-  img.addEventListener('click', () => {
-    lbImg.src = img.dataset.full || img.src;
-    lb.classList.add('active');
+  window.addEventListener('load', () => {
+    document.body.style.opacity = '1';
   });
-});
-document.querySelectorAll('.spread-full[data-full]').forEach(el => {
-  el.addEventListener('click', () => {
-    lbImg.src = el.dataset.full;
-    lb.classList.add('active');
-  });
-});
-lb.addEventListener('click', () => {
-  lb.classList.remove('active');
-  lbImg.src = '';
-});
+
+  /* ── Pin alignment helper ──────────────────────────────
+     Hold SHIFT and click anywhere on the map.
+     The pin coordinates (left: X%; top: Y%;) are shown in a
+     toast at the bottom and copied to your clipboard.
+     Paste into the corresponding <div class="pin"> in the HTML.
+     Remove this whole block once all pins are placed.
+  ──────────────────────────────────────────────────────── */
+  (function pinHelper(){
+    const mapWrap = document.querySelector('.map-wrap');
+    if (!mapWrap) return;
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fbfaf7;padding:12px 20px;border-radius:4px;font-family:ui-monospace,Menlo,monospace;font-size:14px;letter-spacing:.04em;z-index:9999;opacity:0;transition:opacity .25s;pointer-events:none;box-shadow:0 6px 24px rgba(0,0,0,0.25);';
+    document.body.appendChild(toast);
+    const hint = document.createElement('div');
+    hint.textContent = 'Pin helper active — Shift+click the map to copy coords';
+    hint.style.cssText = 'position:fixed;top:80px;right:24px;background:rgba(26,26,26,0.88);color:#fbfaf7;padding:8px 14px;border-radius:4px;font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.06em;z-index:9998;pointer-events:none;';
+    document.body.appendChild(hint);
+    let timer;
+    mapWrap.addEventListener('click', (e) => {
+      if (!e.shiftKey) return;
+      const rect = mapWrap.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+      const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+      const snippet = 'left: ' + x + '%; top: ' + y + '%;';
+      if (navigator.clipboard) navigator.clipboard.writeText(snippet).catch(() => {});
+      toast.textContent = snippet + '   (copied)';
+      toast.style.opacity = '1';
+      clearTimeout(timer);
+      timer = setTimeout(() => toast.style.opacity = '0', 2400);
+    });
+  })();
 </script>
 
 </body>

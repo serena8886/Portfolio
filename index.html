@@ -398,9 +398,49 @@ nav {
   border-color: var(--ink);
 }
 
+/* ════════════════════════════════
+   INTRO — black welcome drawer
+   ════════════════════════════════ */
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 6vw, 80px);
+  transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+#intro-overlay.gone {
+  transform: translateY(-100%);
+}
+#intro-welcome {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: .04em;
+  color: #f5f3ef;
+  text-align: center;
+  min-height: 1em;
+}
+#intro-welcome .typewriter-cursor {
+  background: #f5f3ef;
+}
+body.intro-active {
+  overflow: hidden;
+}
+
 </style>
 </head>
 <body>
+
+<!-- ── Intro overlay (black welcome drawer) ──────────── -->
+<div id="intro-overlay">
+  <p id="intro-welcome"></p>
+</div>
 
 <!-- ── Nav ────────────────────────────────────────────── -->
 <nav>
@@ -430,12 +470,12 @@ nav {
   <div class="about-body" id="about-body">
     <p id="tw-intro"></p>
     <ul class="about-list fade-line">
-      <li>Obsessed with maps and the stories hidden inside spatial data</li>
+      <li>Curious about how people decide, work, and move — in offices and across cities</li>
       <li>A University of Toronto student — Human Resources major, GIS minor</li>
-      <li>Building web maps and spatial analyses that make geographic patterns visible</li>
-      <li>A certified diver who finds structure both underwater and in datasets</li>
+      <li>Equally at home in people analytics and spatial analysis — same rigor, different lens</li>
+      <li>A certified diver who looks for structure beneath the surface — in data, oceans, and organizations</li>
     </ul>
-    <p class="fade-line">I turn geographic and urban data into interactive visualizations and spatial insights — from accessibility analysis to tree canopy equity mapping across Canadian cities.</p>
+    <p class="fade-line">I work where Human Resources meets GIS — bringing analytical rigor to both how people work and how places function. My maps explore urban accessibility, food equity, and public health across Canadian cities; my HR focus is on workforce equity and the patterns that move people through organizations.</p>
   </div>
   <p class="skills-label fade-line">Technical Skills</p>
   <div class="skills-row">
@@ -499,9 +539,37 @@ nav {
 </div>
 
 <script>
-/* ── Page fade-in on load ── */
+/* ── Page fade-in + intro drawer sequence on load ── */
 window.addEventListener('load', () => {
   document.body.style.opacity = '1';
+  document.body.classList.add('intro-active');
+
+  // ── Edit the welcome text here ──
+  const welcomeText = 'Welcome to the work of Serena Xie';
+
+  const welcomeEl = document.getElementById('intro-welcome');
+  const cursor = document.createElement('span');
+  cursor.className = 'typewriter-cursor';
+  welcomeEl.appendChild(cursor);
+
+  let i = 0;
+  const typeIv = setInterval(() => {
+    if (i < welcomeText.length) {
+      cursor.insertAdjacentText('beforebegin', welcomeText[i++]);
+    } else {
+      clearInterval(typeIv);
+      // pause after typing, then slide the intro drawer up off-screen
+      setTimeout(() => {
+        cursor.remove();
+        document.getElementById('intro-overlay').classList.add('gone');
+        document.body.classList.remove('intro-active');
+        // brief moment to reveal the Wuhan map, then auto-scroll to About
+        setTimeout(() => {
+          document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+        }, 1400);
+      }, 700);
+    }
+  }, 65);
 });
 
 /* ── Contact overlay ── */
