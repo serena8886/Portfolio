@@ -33,7 +33,7 @@ body {
 nav {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 200;
+  z-index: 1100; /* above Leaflet panes (max 1000) so it stays on top while scrolling */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -526,7 +526,7 @@ h1 {
 
 <div class="footer-row">
   <a href="../page-work.html">&larr; All work</a>
-  <span>Web map · Serena Xie · Toronto Open Data</span>
+  <a href="https://serena8886.github.io/Toronto-Child-Care/" target="_blank" rel="noopener">Live site &nearr;</a>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

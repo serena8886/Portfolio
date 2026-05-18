@@ -146,46 +146,10 @@ nav {
 .c-c1 { background: #c76d6d; }
 .c-c2 { background: #9f7568; }
 .c-c3 { background: #5f7b69; }
-.childcare-overlay {
-  position: absolute;
-  left: 24px;
-  bottom: 24px;
-  width: min(300px, calc(100% - 48px));
-  background: rgba(251,250,247,0.93);
-  border: 1px solid var(--border);
-  padding: 14px;
-}
-.childcare-overlay span {
-  display: block;
-  font-size: 9px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 8px;
-}
-.childcare-overlay strong {
-  font-family: 'Fraunces', serif;
-  font-size: 22px;
-  line-height: 1.1;
-  color: var(--ink);
-  font-weight: 600;
-}
-
 .featured-body {
   padding: clamp(32px,5vw,64px) clamp(24px,4vw,56px);
   display: flex; flex-direction: column;
   justify-content: center;
-}
-.featured-eyebrow {
-  font-size: 9px; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--muted);
-  margin-bottom: 16px; display: flex;
-  align-items: center; gap: 12px;
-}
-.featured-eyebrow::before {
-  content: ''; display: block;
-  width: 24px; height: 1px;
-  background: var(--muted);
 }
 .featured-num {
   font-family: 'Fraunces', serif;
@@ -361,14 +325,6 @@ footer {
   gap: 20px;
 }
 
-.footer-name {
-  font-family: 'Fraunces', serif;
-  font-size: 13px;
-  font-weight: 300;
-  font-style: italic;
-  color: var(--muted);
-}
-
 .footer-links { display: flex; gap: 28px; align-items: center; }
 .footer-links a {
   font-size: 9px;
@@ -407,14 +363,9 @@ footer {
         <span class="c-a1"></span><span class="c-a2"></span><span class="c-b2"></span><span class="c-c2"></span><span class="c-c3"></span><span class="c-b3"></span><span class="c-a3"></span><span class="c-a2"></span><span class="c-b1"></span>
         <span class="c-b1"></span><span class="c-c1"></span><span class="c-c2"></span><span class="c-b2"></span><span class="c-a2"></span><span class="c-a1"></span><span class="c-a2"></span><span class="c-b3"></span><span class="c-c3"></span>
       </div>
-      <div class="childcare-overlay">
-        <span>Bivariate web map</span>
-        <strong>Childcare access × women's labour participation</strong>
-      </div>
     </div>
   </div>
   <div class="featured-body">
-    <span class="featured-eyebrow">Featured Web Project</span>
     <div class="featured-num">00</div>
     <h2 class="featured-title">The Childcare × Workforce Map</h2>
     <p class="featured-desc">
@@ -444,7 +395,6 @@ footer {
     ></video>
   </div>
   <div class="featured-body">
-    <span class="featured-eyebrow">Featured Web Project</span>
     <div class="featured-num">01</div>
     <h2 class="featured-title">SafeSteps Toronto</h2>
     <p class="featured-desc">
@@ -529,10 +479,8 @@ footer {
 
 <!-- ── Footer ───────────────────────────────────────── -->
 <footer>
-  <span class="footer-name">Serena, 2025</span>
   <div class="footer-links">
     <a href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="index.html">Home</a>
   </div>
 </footer>
 
