@@ -4,785 +4,362 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Health Mapping & Spatial Cluster Analysis — Serena</title>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-
 :root {
-  --bg:     #f7f6f4;
-  --white:  #ffffff;
-  --ink:    #1a1a1a;
-  --muted:  rgba(30,25,20,0.38);
-  --border: rgba(0,0,0,0.08);
-  --subtle: #8a8680;
+  --bg:#f7f6f4; --paper:#fbfaf7; --ink:#1a1a1a; --warm:#3d3830;
+  --muted:rgba(30,25,20,0.72); --hint:rgba(30,25,20,0.55);
+  --rule:rgba(0,0,0,0.22); --pin:#1a1a1a;
 }
-
 body {
-  background: var(--bg);
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  padding: clamp(80px,10vh,120px) clamp(16px,4vw,40px) clamp(32px,5vw,60px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(32px,5vw,60px);
-  opacity: 0;
-  transition: opacity .3s ease;
+  background: var(--bg); font-family: 'Manrope', sans-serif; color: var(--ink);
+  overflow-x: hidden; padding-top: 80px; opacity: 0; transition: opacity .4s ease;
 }
-
-/* ── Nav ─────────────────────────────────────────────── */
 nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 200;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: clamp(18px,3vh,28px) clamp(24px,4vw,52px);
-  background: var(--bg);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: clamp(18px,3vh,28px) clamp(24px,4vw,52px); background: var(--bg);
 }
 .nav-logo {
-  font-family: 'EB Garamond', serif;
-  font-size: 17px;
-  font-weight: 400;
-  letter-spacing: .04em;
-  color: var(--ink);
-  text-decoration: none;
+  font-family: 'Fraunces', serif; font-size: 17px; letter-spacing: .04em;
+  color: var(--ink); text-decoration: none;
 }
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a {
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color .2s;
-  font-family: 'Inter', sans-serif;
-  border: none; background: none; cursor: pointer;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color .2s;
 }
-.nav-links a:hover,
-.nav-links a.active { color: var(--ink); }
-
-/* ── Spread ───────────────────────────────────────────── */
-.spread {
-  width: 100%;
-  max-width: 1100px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: var(--white);
-  box-shadow:
-    0 4px 6px rgba(0,0,0,.04),
-    0 12px 40px rgba(0,0,0,.10),
-    0 30px 80px rgba(0,0,0,.08);
-  position: relative;
-  border-radius: 2px 6px 6px 2px;
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+.page-header, .journal, .refs, .footer-row {
+  max-width: 980px; margin-left: auto; margin-right: auto;
+  padding-left: clamp(20px,5vw,52px); padding-right: clamp(20px,5vw,52px);
 }
-.spread::after {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%; width: 28px;
-  transform: translateX(-50%);
-  background: linear-gradient(to right,
-    transparent 0%, rgba(0,0,0,.03) 30%,
-    rgba(0,0,0,.07) 50%, rgba(0,0,0,.03) 70%, transparent 100%);
-  pointer-events: none;
-  z-index: 10;
+.annotated {
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(16px,3vw,40px);
+  padding-right: clamp(16px,3vw,40px);
 }
-@media (max-width: 640px) {
-  .spread { grid-template-columns: 1fr; border-radius: 4px; }
-  .spread::after { display: none; }
-  .spread-hero { border-radius: 4px; }
+.page-header { margin-top: clamp(40px,6vh,80px); margin-bottom: clamp(28px,4vh,48px); }
+.breadcrumb {
+  font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: clamp(32px,5vh,56px);
 }
-
-/* ── Left page ───────────────────────────────────────── */
-.page-left {
-  padding: clamp(32px,5vw,64px) clamp(24px,4vw,52px) clamp(32px,5vw,64px) clamp(24px,4vw,56px);
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid rgba(0,0,0,.06);
-  min-height: clamp(400px,55vw,640px);
+.breadcrumb a { color: var(--muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--ink); }
+.breadcrumb .sep { margin: 0 10px; color: var(--hint); }
+.header-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-bottom: 14px; border-bottom: 1px solid var(--ink); margin-bottom: 28px;
+  font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--warm);
 }
-@media (max-width: 640px) {
-  .page-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,.06); min-height: unset; }
+.header-stamp {
+  border: 1px solid var(--warm);
+  padding: 4px 11px;
+  display: inline-block;
+  transform: rotate(-1.2deg);
+  background:
+    linear-gradient(104deg, rgba(255,239,128,0) 2%, rgba(255,239,128,0.76) 8%, rgba(255,239,128,0.55) 88%, rgba(255,239,128,0) 96%);
+  box-shadow: inset 0 -8px 0 rgba(255,239,128,0.32);
 }
-
-.project-meta {
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  margin-bottom: 10px;
-  font-family: 'Inter', sans-serif;
+.page-title {
+  font-family: 'Fraunces', serif; font-size: clamp(34px,5vw,56px);
+  font-weight: 400; line-height: 1.1; letter-spacing: -.01em; margin-bottom: 8px;
 }
-.project-num {
-  font-family: 'EB Garamond', serif;
-  font-size: clamp(42px,6vw,72px);
-  font-weight: 400;
-  line-height: 1.05;
-  color: var(--ink);
-  margin-bottom: clamp(20px,3vw,32px);
-  letter-spacing: -.01em;
+.page-subtitle {
+  font-family: 'Fraunces', serif; font-size: clamp(17px,2vw,22px);
+  font-style: italic; color: var(--warm); line-height: 1.5; margin-bottom: 18px; max-width: 720px;
 }
-.project-title {
-  font-family: 'EB Garamond', serif;
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1.4;
-  margin-bottom: 16px;
+.header-tags { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.header-tags span + span::before { content: ' · '; margin: 0 4px; color: var(--hint); }
+.annotated { margin-bottom: clamp(40px,6vh,72px); }
+.section-eyebrow {
+  font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
 }
-
-/* data info block */
-.data-info {
-  margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
+.map-wrap {
+  position: relative; background: var(--paper); border: 1px solid var(--rule);
+  border-radius: 2px; overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06), 0 14px 36px rgba(0,0,0,0.09);
 }
-.data-info p {
-  font-family: 'Inter', sans-serif;
-  font-size: 9px;
-  font-weight: 300;
-  letter-spacing: .04em;
-  color: var(--subtle);
-  line-height: 1.9;
-}
-.data-info strong {
-  font-weight: 500;
-  color: #6a6560;
-}
-
-/* method blocks */
-.method-block { margin-bottom: 28px; }
-.method-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--ink);
-  margin-bottom: 8px;
-}
-.method-body {
-  font-family: 'EB Garamond', serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.85;
-  color: var(--ink);
-  max-width: 280px;
-}
-.method-body code {
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  background: rgba(0,0,0,.05);
-  padding: 1px 5px;
-  border-radius: 2px;
-  color: #3a3630;
-}
-
-/* finding blocks */
-.finding-block { margin-bottom: 24px; }
-.finding-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  margin-bottom: 6px;
-  display: block;
-}
-.finding-body {
-  font-family: 'EB Garamond', serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.85;
-  color: var(--ink);
-  max-width: 280px;
-}
-
-/* formula block */
-.formula-block {
-  background: rgba(0,0,0,.03);
-  border-left: 2px solid var(--subtle);
-  padding: 12px 16px;
-  margin: 16px 0 24px;
-  border-radius: 0 2px 2px 0;
-}
-.formula-block p {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--ink);
-  letter-spacing: .02em;
-  line-height: 1.7;
-}
-.formula-block .formula-label {
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  margin-bottom: 6px;
-  display: block;
-}
-
-/* LISA legend */
-.lisa-legend {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'EB Garamond', serif;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--ink);
-  line-height: 1;
-}
-.legend-swatch {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  border-radius: 2px;
-}
-.legend-swatch.hh { background: #c1392b; }
-.legend-swatch.ll { background: #2980b9; }
-.legend-swatch.hl { background: #e67e22; }
-.legend-swatch.lh { background: #85c1e9; }
-.legend-swatch.ns { background: #c8c2bc; }
-
-.legend-section-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  margin-bottom: 10px;
-  display: block;
-}
-
-/* pull quote */
-.pull-quote {
-  font-family: 'EB Garamond', serif;
-  font-size: 16px;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--ink);
-  line-height: 2;
-  max-width: 280px;
-  margin-bottom: 16px;
-}
-.quote-attr {
-  font-size: 9px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  font-family: 'Inter', sans-serif;
-}
-
-/* ── Right page (text variant only) ─────────────────── */
-.page-right {
-  padding: clamp(32px,5vw,64px) clamp(24px,4vw,52px) clamp(32px,5vw,64px) clamp(24px,4vw,40px);
-  display: flex;
-  flex-direction: column;
-  min-height: clamp(400px,55vw,640px);
-}
-@media (max-width: 640px) { .page-right { min-height: unset; } }
-
-/* ── Full-bleed spread ───────────────────────────────── */
-.spread-full {
-  width: 100%;
-  max-width: 1100px;
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 4px 6px rgba(0,0,0,.04),
-    0 12px 40px rgba(0,0,0,.10),
-    0 30px 80px rgba(0,0,0,.08);
-  border-radius: 2px 6px 6px 2px;
-  cursor: zoom-in;
-}
-.spread-full img { width: 100%; display: block; transition: opacity .2s; }
-.spread-full:hover img { opacity: .85; }
-.spread-full::after {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%; width: 28px;
-  transform: translateX(-50%);
-  background: linear-gradient(to right,
-    transparent 0%, rgba(0,0,0,.04) 30%,
-    rgba(0,0,0,.09) 50%, rgba(0,0,0,.04) 70%, transparent 100%);
-  pointer-events: none;
-}
-
-/* ── Lightbox ────────────────────────────────────────── */
-#lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.92);
-  z-index: 1000;
-  cursor: zoom-out;
-  align-items: center;
-  justify-content: center;
-}
-#lightbox.active { display: flex; }
-#lightbox img {
-  max-width: 92vw;
-  max-height: 92vh;
+.map-wrap img { width: 100%; display: block; }
+.map-stack { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--rule); }
+.map-stack img {
+  background: var(--paper);
+  aspect-ratio: 2338 / 1653;
   object-fit: contain;
-  pointer-events: none;
-  box-shadow: 0 8px 60px rgba(0,0,0,.6);
+}
+.pin {
+  position: absolute; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--pin); color: var(--paper); display: flex; align-items: center;
+  justify-content: center; font-size: 13px; font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4), 0 0 0 3px rgba(247,246,244,0.95);
+  transform: translate(-50%, -50%);
+}
+.map-caption {
+  font-family: 'Fraunces', serif; font-size: 15px; font-style: italic;
+  color: var(--muted); margin-top: 14px; text-align: center;
+}
+.pin-notes { margin-top: clamp(28px,4vh,40px); }
+.pin-note { display: flex; gap: 16px; padding: 14px 0; border-top: .5px solid var(--rule); }
+.pin-note:first-child { border-top: 0; padding-top: 0; }
+.pin-note:last-child { border-bottom: .5px solid var(--rule); }
+.pin-num {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--pin); color: var(--paper); display: inline-flex; align-items: center;
+  justify-content: center; font-size: 13px; font-weight: 500;
+}
+.pin-note-label {
+  font-size: 12px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--warm); margin-right: 10px;
+}
+.pin-note-text { font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.7; color: var(--ink); }
+.journal { margin-bottom: clamp(40px,6vh,72px); }
+.journal-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(28px,4vw,44px);
+}
+.margin-col {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 18px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px,3vw,34px);
+}
+.margin-block { margin-bottom: 28px; }
+.margin-block:last-child { margin-bottom: 0; }
+.margin-label {
+  font-size: 11px; font-weight: 500; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 7px;
+}
+.margin-text {
+  font-family: 'Fraunces', serif; font-size: 16px; font-style: italic;
+  line-height: 1.65; color: var(--warm);
+}
+.margin-date { font-size: 11px; letter-spacing: .15em; color: var(--hint); margin-top: 8px; }
+.sketch-box {
+  border-top: .5px dashed var(--rule); border-bottom: .5px dashed var(--rule);
+  padding: 14px 0; font-family: 'Courier New', monospace; font-size: 12px;
+  color: var(--warm); line-height: 1.75; white-space: pre-wrap;
+}
+.main-col {
+  padding-top: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px,4vw,44px);
+}
+.j-section { margin-bottom: clamp(28px,4vh,40px); }
+.j-section-num {
+  font-size: 12px; font-weight: 500; letter-spacing: .25em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+}
+.j-section-title {
+  font-family: 'Fraunces', serif; font-size: clamp(22px,2.4vw,28px);
+  font-weight: 500; line-height: 1.25; margin-bottom: 14px;
+}
+.j-section-body { font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.85; }
+.j-section-body p + p { margin-top: 14px; }
+.criteria-list {
+  list-style: none; margin: 14px 0; padding: 14px 0;
+  border-top: .5px solid var(--rule); border-bottom: .5px solid var(--rule);
+}
+.criteria-list li {
+  font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.7;
+  padding: 4px 0 4px 18px; position: relative;
+}
+.criteria-list li::before { content: '-'; position: absolute; left: 0; color: var(--hint); }
+.criteria-list b {
+  font-family: 'Manrope', sans-serif; font-size: 12px; letter-spacing: .18em;
+  text-transform: uppercase; font-weight: 500; color: var(--warm); margin-right: 8px;
+}
+.j-figure {
+  width: min(1320px, calc(100vw - 32px));
+  margin: 22px 0 22px 50%;
+  transform: translateX(-50%);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 14px;
+  border-radius: 2px;
+  grid-column: 1 / -1;
+}
+.j-figure img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 2338 / 1653;
+  object-fit: contain;
+  background: var(--paper);
+}
+.j-figure figcaption {
+  font-size: 12px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted);
+  margin-top: 10px; text-align: center;
+}
+.refs {
+  margin-bottom: clamp(48px,7vh,96px); padding-top: clamp(28px,4vh,40px); border-top: 1px solid var(--ink);
+}
+.refs-heading {
+  font-size: 12px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--warm); margin-bottom: 16px;
+}
+.refs li { font-family: 'Fraunces', serif; font-size: 15px; line-height: 1.75; padding: 8px 0; }
+.footer-row {
+  padding-bottom: clamp(40px,6vh,80px); display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+}
+.footer-row a { color: var(--muted); text-decoration: none; border-bottom: .5px solid var(--rule); padding-bottom: 2px; }
+.footer-row a:hover { color: var(--ink); }
+@media (max-width: 760px) {
+  .nav-links { gap: 14px; }
+  .header-row, .footer-row { gap: 12px; flex-direction: column; align-items: flex-start; }
+  .margin-col, .main-col { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
-
-<!-- ── Nav ──────────────────────────────────────────── -->
 <nav>
   <a href="../index.html" class="nav-logo">Serena</a>
   <div class="nav-links">
-    <a href="../index.html">Home</a>
-    <a href="../index.html#about">About Me</a>
+    <a href="../index.html#hero">Home</a>
+    <a href="../index.html#about">About</a>
     <a href="../page-work.html" class="active">Work</a>
-    <a href="../index.html" onclick="sessionStorage.setItem('openContact','1')">Contact</a>
     <a href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener">LinkedIn</a>
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════
-     SPREAD 1 — Title page
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <p class="project-meta">GGR376 &nbsp;·&nbsp; Lab 3</p>
-    <div class="project-num">Health<br>Mapping<br>&amp; Spatial<br>Cluster</div>
-
-    <p class="method-body">
-      Choropleth mapping of infant mortality rates by sex across Ontario,
-      paired with a Local Indicators of Spatial Association (LISA) cluster
-      analysis of child and senior road collision rates at the dissemination
-      area level.
-    </p>
-    <p class="method-body" style="margin-top:10px; color:var(--subtle);">
-      Together, the two parts reveal how geographic and demographic
-      vulnerability intersect across Ontario's public health regions
-      and dissemination areas.
-    </p>
-
-    <div class="data-info">
-      <p><strong>Data Source</strong> &nbsp; Statistics Canada · Ontario Road Safety Annual Report</p>
-      <p><strong>Projection</strong> &nbsp; NAD 1983 Statistics Canada Lambert</p>
-      <p><strong>Tools</strong> &nbsp; ArcGIS Pro — Choropleth, Spatial Weights, LISA</p>
-      <p><strong>Course</strong> &nbsp; GGR376, University of Toronto</p>
-    </div>
+<header class="page-header">
+  <div class="breadcrumb"><a href="../page-work.html">Work</a><span class="sep">/</span>Health Mapping</div>
+  <div class="header-row">
+    <div class="header-stamp">2026 — Field Notebook</div>
+    <div>Project · Ontario</div>
   </div>
+  <h1 class="page-title">Health Mapping & Spatial Cluster Analysis</h1>
+  <p class="page-subtitle">A two-part GIS project connecting infant mortality geography with age-specific road collision clusters.</p>
+</header>
 
-  <div class="page-right" style="justify-content:flex-end; padding-left: clamp(24px,4vw,52px);">
-    <div style="margin-top:auto;">
-      <p class="project-meta" style="margin-bottom:6px;">Two-Part Analysis</p>
-      <div style="border-left: 1px solid rgba(0,0,0,.12); padding-left: 16px; margin-bottom: 28px;">
-        <p class="method-body" style="font-style:italic; color:var(--subtle); max-width:220px;">
-          Part 1 — Infant Mortality<br>Rate Choropleth Mapping
-        </p>
+<section class="annotated">
+  <div class="section-eyebrow">The maps · four readings</div>
+  <div class="map-wrap">
+    <div class="map-stack">
+      <img src="Infant Mortality Rates.jpg" alt="Infant mortality rates map.">
+      <img src="lisa child.jpg" alt="LISA child collision cluster map.">
+    </div>
+    <div class="pin" style="left: 27%; top: 12%;" title="Northern gradient">1</div>
+    <div class="pin" style="left: 42%; top: 39%;" title="GTA low-rate zone">2</div>
+    <div class="pin" style="left: 71%; top: 67%;" title="Child collision clusters">3</div>
+    <div class="pin" style="left: 83%; top: 86%;" title="Spatial outliers">4</div>
+  </div>
+  <div class="map-caption">The project pairs provincial health-unit choropleths with dissemination-area LISA cluster maps.</div>
+  <div class="pin-notes">
+    <div class="pin-note"><div class="pin-num">1</div><div><span class="pin-note-label">North-south gradient</span><span class="pin-note-text">Infant mortality rates rise in northern and remote regions, showing a spatial pattern tied to structural access differences.</span></div></div>
+    <div class="pin-note"><div class="pin-num">2</div><div><span class="pin-note-label">GTA contrast</span><span class="pin-note-text">The Greater Toronto Area sits among the lowest infant mortality rates, reinforcing the geography of health infrastructure concentration.</span></div></div>
+    <div class="pin-note"><div class="pin-num">3</div><div><span class="pin-note-label">Cluster logic</span><span class="pin-note-text">LISA separates simple high-rate areas from statistically meaningful clusters where similar values gather together.</span></div></div>
+    <div class="pin-note"><div class="pin-num">4</div><div><span class="pin-note-label">Outliers</span><span class="pin-note-text">High-low and low-high categories reveal neighbourhoods that break from their surroundings, often more policy-relevant than broad averages.</span></div></div>
+  </div>
+</section>
+
+<section class="journal">
+  <div class="section-eyebrow">Field journal · the process</div>
+  <div class="journal-grid">
+    <aside class="margin-col">
+      <div class="margin-block">
+        <div class="margin-label">Observation</div>
+        <div class="margin-text">A rate map shows where vulnerability is high. A cluster map asks whether that vulnerability is spatially organized.</div>
       </div>
-      <div style="border-left: 1px solid rgba(0,0,0,.12); padding-left: 16px;">
-        <p class="method-body" style="font-style:italic; color:var(--subtle); max-width:220px;">
-          Part 2 — LISA Spatial<br>Cluster Analysis of<br>Road Collision Rates
-        </p>
+      <div class="margin-block">
+        <div class="margin-label">Sketch</div>
+        <div class="sketch-box">Part 1:
+PHU join -> IMR rates
+same breaks -> compare sex
+
+Part 2:
+injuries / population
+queen weights -> LISA</div>
       </div>
-    </div>
-  </div>
-</div>
+      <div class="margin-block">
+        <div class="margin-label">Decision</div>
+        <div class="margin-text">Using one classification scheme for male and female IMR maps made the comparison honest.</div>
+      </div>
+    </aside>
 
-<!-- ══════════════════════════════════════════
-     SPREAD 2 — Part 1 Methodology (text only)
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <p class="project-meta">Part 1 — Infant Mortality</p>
-    <h2 class="project-title">Data Join &amp;<br>Classification</h2>
-
-    <div class="method-block">
-      <p class="method-title">Tabular Join</p>
-      <p class="method-body">
-        Infant mortality rate data were joined to Ontario public health
-        region boundaries using a shared <code>PHU_ID</code> field.
-        Null values were inspected post-join and unmatched records
-        excluded to maintain cartographic accuracy across all
-        health unit polygons.
-      </p>
-    </div>
-
-    <div class="method-block">
-      <p class="method-title">Classification Decision</p>
-      <p class="method-body">
-        A unified breakpoint scheme was adopted to enable direct
-        side-by-side comparison of male and female IMR maps.
-        Class boundaries were derived from the male IMR quartile
-        distribution — the sex exhibiting higher range and greater
-        variance — then applied identically to the female layer.
-      </p>
-      <p class="method-body" style="margin-top:10px;">
-        This approach ensures colour gradations represent equivalent
-        rate thresholds across both maps, making gender disparities
-        immediately legible without rescaling artefacts or perceptual
-        mismatches between the two layouts.
-      </p>
-    </div>
-  </div>
-
-  <div class="page-right">
-    <p class="project-meta">Part 1 — Rationale</p>
-    <h2 class="project-title">Why Unified<br>Breakpoints?</h2>
-
-    <div class="method-block">
-      <p class="method-title">The Problem with Independent Classification</p>
-      <p class="method-body">
-        If male and female maps used independently derived class
-        breaks, identical colours would represent different rate
-        ranges — making a direct visual comparison misleading.
-        A region appearing "medium-high" on both maps could have
-        rates differing by several points per 1,000 live births.
-      </p>
-    </div>
-
-    <div class="method-block">
-      <p class="method-title">Anchoring to Male IMR</p>
-      <p class="method-body">
-        Male infant mortality rates span a wider range provincially,
-        making their quartile intervals a more robust anchor.
-        By standardising to these breaks, the female map preserves
-        full comparability — the same colour always means the same
-        rate, regardless of sex — and the gender gap becomes
-        directly readable from colour contrast alone.
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD 3 — Part 1 Findings (text only)
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <p class="project-meta">Part 1 — Key Findings</p>
-    <h2 class="project-title">North–South Gradient<br>&amp; Gender Gap</h2>
-
-    <div class="finding-block">
-      <span class="finding-label">Geographic Pattern</span>
-      <p class="finding-body">
-        A clear north–south gradient characterises Ontario's infant
-        mortality landscape. Remote northern regions — particularly
-        those with large Indigenous populations — consistently record
-        the highest rates, while the Greater Toronto Area and
-        surrounding public health units occupy the lowest quintile.
-        This spatial pattern reflects structural inequities in
-        healthcare access, socioeconomic conditions, and social
-        determinants of health.
-      </p>
-    </div>
-
-    <div class="finding-block">
-      <span class="finding-label">Gender Disparity</span>
-      <p class="finding-body">
-        Male infant mortality rates averaged 10.8 per 1,000 live
-        births against 8.2 per 1,000 for females — a consistent gap
-        observed across virtually every region. The disparity is
-        most pronounced in northern health units, suggesting that
-        geographic disadvantage amplifies biological differences
-        in infant survival.
-      </p>
-    </div>
-  </div>
-
-  <div class="page-right">
-    <p class="project-meta" style="margin-bottom: auto;">&nbsp;</p>
-
-    <p class="pull-quote">
-      "Northern and remote regions carry a disproportionate burden
-      of infant mortality — a pattern that persists across sex and
-      reflects structural, not merely biological, inequality."
-    </p>
-    <span class="quote-attr">Part 1 — Interpretation</span>
-
-    <div style="margin-top: auto; padding-top: 28px; border-top: 1px solid rgba(0,0,0,.08);">
-      <span class="finding-label">GTA Pattern</span>
-      <p class="finding-body">
-        The Greater Toronto Area records among the lowest infant
-        mortality rates provincially for both sexes, consistent
-        with its concentration of tertiary healthcare infrastructure
-        and higher median household income.
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD 4 — Part 2 Methodology (text only)
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <p class="project-meta">Part 2 — Collision Clusters</p>
-    <h2 class="project-title">Standardised Rate<br>&amp; Spatial Weights</h2>
-
-    <div class="method-block">
-      <p class="method-title">Standardised Collision Rate</p>
-      <p class="method-body">
-        Raw collision counts were standardised to account for
-        population size differences across dissemination areas.
-        A per-1,000 rate was computed separately for child
-        and senior populations:
-      </p>
-
-      <div class="formula-block">
-        <span class="formula-label">Formula</span>
-        <p>Child Rate &nbsp;= &nbsp;<code>Child_Inj / ChildPop × 1,000</code></p>
-        <p style="margin-top:6px;">Senior Rate &nbsp;= &nbsp;<code>Senior_Inj / SeniorPop × 1,000</code></p>
+    <div class="main-col">
+      <div class="j-section">
+        <div class="j-section-num">01 · Brief</div>
+        <div class="j-section-title">Two public health questions, one spatial lens</div>
+        <div class="j-section-body">
+          <p>The first part maps infant mortality rates across Ontario public health units by sex. The second part uses Local Indicators of Spatial Association to identify clusters and outliers in child and senior road collision rates.</p>
+          <p>Together, the maps show how public health risk can be uneven in two ways: across broad regions, and within neighbourhood-level spatial relationships.</p>
+        </div>
       </div>
 
-      <p class="method-body">
-        Dissemination areas with a zero denominator were assigned
-        null values and excluded to prevent division artefacts
-        from distorting cluster detection.
-      </p>
-    </div>
-  </div>
-
-  <div class="page-right">
-    <p class="project-meta">Part 2 — Spatial Structure</p>
-    <h2 class="project-title">Spatial Weights<br>Matrix</h2>
-
-    <div class="method-block">
-      <p class="method-title">Queen's Case Contiguity</p>
-      <p class="method-body">
-        A Queen's case contiguity weights matrix was constructed,
-        defining neighbours as any dissemination area sharing at
-        least one boundary point — including corner-touching
-        polygons. This is more inclusive than Rook's contiguity
-        and better captures realistic spatial adjacency in
-        irregular census geometries.
-      </p>
-    </div>
-
-    <div class="method-block">
-      <p class="method-title">Row Standardisation</p>
-      <p class="method-body">
-        Weights were row-standardised so that each area's
-        neighbours sum to 1.0. This prevents areas with many
-        neighbours from being systematically down-weighted,
-        preserving the interpretability of the local
-        Moran's <em>I</em> statistic across the study area.
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD FULL — Child Collision Rate map
-     ══════════════════════════════════════════ -->
-<div class="spread-full" data-full="Child Collision Rate.jpg">
-  <img src="Child Collision Rate.jpg" alt="Child Collision Rate — Ontario">
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD 5 — LISA legend + child findings
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <p class="project-meta">Part 2 — LISA Results</p>
-    <h2 class="project-title">Local Spatial<br>Autocorrelation</h2>
-
-    <p class="method-body" style="margin-bottom:20px;">
-      LISA identifies statistically significant clusters and spatial
-      outliers at the dissemination area level, revealing where
-      high or low collision rates co-occur with similarly rated
-      neighbours — and where they do not.
-    </p>
-
-    <span class="legend-section-label">LISA Cluster Categories</span>
-    <div class="lisa-legend">
-      <div class="legend-item">
-        <span class="legend-swatch hh"></span>
-        <span><strong>High–High</strong> &nbsp; high rate, high-rate neighbours</span>
+      <div class="j-section">
+        <div class="j-section-num">02 · Method — infant mortality</div>
+        <div class="j-section-title">Making two choropleths comparable</div>
+        <div class="j-section-body">
+          <p>Infant mortality data were joined to public health unit boundaries using shared identifiers. Instead of letting each map generate independent class breaks, I used one breakpoint scheme for both male and female rates.</p>
+          <ul class="criteria-list">
+            <li><b>Join field</b>Health-unit identifiers linked tabular rates to spatial boundaries.</li>
+            <li><b>Projection</b>NAD 1983 Statistics Canada Lambert supported provincial mapping.</li>
+            <li><b>Classification</b>Breaks derived from the wider male IMR range were applied consistently to both maps.</li>
+          </ul>
+          <p>This avoids a common cartographic trap: the same colour meaning different values on paired maps.</p>
+        </div>
       </div>
-      <div class="legend-item">
-        <span class="legend-swatch ll"></span>
-        <span><strong>Low–Low</strong> &nbsp; low rate, low-rate neighbours</span>
+
+      <figure class="j-figure">
+        <img src="lisa senior.jpg" alt="LISA senior collision cluster map.">
+        <figcaption>Supporting map · Senior collision LISA clusters reveal a different age-risk geography.</figcaption>
+      </figure>
+
+      <div class="j-section">
+        <div class="j-section-num">03 · Method — collision clusters</div>
+        <div class="j-section-title">From raw counts to local spatial autocorrelation</div>
+        <div class="j-section-body">
+          <p>Collision counts were standardized by age-specific population to avoid mistaking large populations for high risk. Child and senior injury rates were calculated per 1,000 people before spatial cluster detection.</p>
+          <ul class="criteria-list">
+            <li><b>Rate</b>Injuries divided by relevant age-group population, multiplied by 1,000.</li>
+            <li><b>Weights</b>Queen's case contiguity defined neighbours through shared edges or corners.</li>
+            <li><b>LISA</b>Local Moran's I identified high-high, low-low, high-low, and low-high patterns.</li>
+          </ul>
+        </div>
       </div>
-      <div class="legend-item">
-        <span class="legend-swatch hl"></span>
-        <span><strong>High–Low</strong> &nbsp; high rate, low-rate neighbours</span>
+
+      <div class="j-section">
+        <div class="j-section-num">04 · Finding</div>
+        <div class="j-section-title">Risk is age-specific and spatially patterned</div>
+        <div class="j-section-body">
+          <p>Infant mortality shows a broad north-south gradient. Road collision risk, however, is more local and age-specific: child clusters point toward dense urban exposure, while senior clusters appear more strongly in suburban crossing environments.</p>
+          <p>The conclusion is practical: health and safety interventions should not be designed from provincial averages alone. Spatial clusters tell planners where the same rate is reinforced by its neighbours, and where a place is an unusual outlier.</p>
+        </div>
       </div>
-      <div class="legend-item">
-        <span class="legend-swatch lh"></span>
-        <span><strong>Low–High</strong> &nbsp; low rate, high-rate neighbours</span>
-      </div>
-      <div class="legend-item">
-        <span class="legend-swatch ns"></span>
-        <span><strong>Not Significant</strong> &nbsp; no spatial pattern detected</span>
+
+      <div class="j-section">
+        <div class="j-section-num">05 · Limitation</div>
+        <div class="j-section-title">Statistical significance is not causation</div>
+        <div class="j-section-body">
+          <p>LISA identifies spatial association, not the cause of that association. The maps are best read as a diagnostic layer that points to where deeper policy, infrastructure, and demographic investigation should begin.</p>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="page-right">
-    <p class="project-meta">Part 2 — Child Clusters</p>
-    <h2 class="project-title">Child Collision<br>Findings</h2>
+<section class="refs">
+  <div class="refs-heading">Project Notes</div>
+  <ol>
+    <li>Data sources: Statistics Canada public health geography and Ontario Road Safety Annual Report collision indicators.</li>
+    <li>Tools: ArcGIS Pro choropleth mapping, spatial weights matrix, Local Indicators of Spatial Association.</li>
+  </ol>
+</section>
 
-    <div class="finding-block">
-      <span class="finding-label">High–High Zones</span>
-      <p class="finding-body">
-        High–High clusters of child collision rates concentrate in
-        inner-city neighbourhoods and older suburban arterial
-        corridors, where traffic volumes, pedestrian exposure,
-        and limited traffic-calming infrastructure converge.
-      </p>
-    </div>
-
-    <div class="finding-block">
-      <span class="finding-label">Low–Low Zones</span>
-      <p class="finding-body">
-        Low–Low zones dominate lower-density outer suburbs and
-        rural areas, reflecting both reduced traffic exposure
-        and lower pedestrian activity among the child population.
-      </p>
-    </div>
-
-    <div class="finding-block" style="margin-top: auto; padding-top: 24px; border-top: 1px solid rgba(0,0,0,.08);">
-      <span class="finding-label">Spatial Outliers</span>
-      <p class="finding-body">
-        High–Low outliers in peri-urban areas suggest localised
-        risk hotspots not embedded in broader clusters — often
-        corresponding to school zones or major intersections
-        within otherwise low-risk suburban fabric.
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD FULL — LISA Child map
-     ══════════════════════════════════════════ -->
-<div class="spread-full" data-full="lisa child.jpg">
-  <img src="lisa child.jpg" alt="LISA — Child Collision Clusters">
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD 6 — Senior analysis + comparison
-     ══════════════════════════════════════════ -->
-<div class="spread">
-  <div class="page-left">
-    <p class="project-meta">Part 2 — Senior Analysis</p>
-    <h2 class="project-title">Senior Collision<br>Clusters</h2>
-
-    <div class="finding-block">
-      <span class="finding-label">Senior Cluster Pattern</span>
-      <p class="finding-body">
-        Senior collision clusters exhibit a markedly different
-        spatial signature. High–High zones are dispersed across
-        inner suburban areas with mixed land use, rather than
-        being tightly centralised in the urban core.
-        Seniors' reliance on surface crossings and lower pedestrian
-        agility amplifies risk at mid-density intersections.
-      </p>
-    </div>
-
-    <div class="finding-block">
-      <span class="finding-label">Comparative Discussion</span>
-      <p class="finding-body">
-        The divergence between child and senior cluster maps
-        confirms that road safety risk is age-stratified and
-        cannot be addressed through a uniform spatial intervention.
-        Children are most vulnerable in high-traffic urban cores;
-        seniors face elevated risk in transitional suburban zones
-        with long crossing distances and lower signal density.
-      </p>
-    </div>
-  </div>
-
-  <div class="page-right">
-    <p class="project-meta">Part 2 — Implications</p>
-    <h2 class="project-title">Targeted<br>Interventions</h2>
-
-    <div class="finding-block">
-      <span class="finding-label">Children</span>
-      <p class="finding-body">
-        Traffic calming measures — speed reductions, raised
-        crosswalks, and reduced signal cycle lengths — are most
-        warranted near school zones and dense urban arterials
-        where child High–High clusters are concentrated.
-      </p>
-    </div>
-
-    <div class="finding-block">
-      <span class="finding-label">Seniors</span>
-      <p class="finding-body">
-        Extended pedestrian signal phases, improved crossing
-        visibility, and refuge islands are indicated near
-        senior-oriented facilities in inner suburban areas
-        where senior High–High clusters appear.
-      </p>
-    </div>
-
-    <div class="finding-block" style="margin-top: auto; padding-top: 24px; border-top: 1px solid rgba(0,0,0,.08);">
-      <span class="finding-label">Conclusion</span>
-      <p class="finding-body">
-        Together, the two LISA maps demonstrate that spatial
-        cluster analysis is an essential tool for age-sensitive
-        road safety planning — one that reveals patterns invisible
-        to aggregate statistics.
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD FULL — LISA Senior map
-     ══════════════════════════════════════════ -->
-<div class="spread-full" data-full="lisa senior.jpg">
-  <img src="lisa senior.jpg" alt="LISA — Senior Collision Clusters">
-</div>
-
-<!-- ══════════════════════════════════════════
-     SPREAD FULL — Senior Collision Rate (closing)
-     ══════════════════════════════════════════ -->
-<div class="spread-full" data-full="Senior Collision Rate.jpg">
-  <img src="Senior Collision Rate.jpg" alt="Senior Collision Rate — Ontario">
-</div>
-
-<!-- ── Lightbox ───────────────────────────────────────── -->
-<div id="lightbox">
-  <img id="lightbox-img" src="" alt="">
+<div class="footer-row">
+  <a href="../page-work.html">&larr; All work</a>
+  <a href="report.pdf" target="_blank" rel="noopener">Read report PDF &nearr;</a>
 </div>
 
 <script>
 window.addEventListener('load', () => { document.body.style.opacity = '1'; });
-
-const lb    = document.getElementById('lightbox');
-const lbImg = document.getElementById('lightbox-img');
-
-document.querySelectorAll('.spread-full[data-full]').forEach(el => {
-  el.addEventListener('click', () => {
-    lbImg.src = el.dataset.full;
-    lb.classList.add('active');
-  });
-});
-lb.addEventListener('click', () => {
-  lb.classList.remove('active');
-  lbImg.src = '';
-});
 </script>
-
 </body>
 </html>

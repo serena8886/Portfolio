@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeSteps Toronto — Serena</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg:#f7f6f4;
+  --paper:#fbfaf7;
+  --ink:#1a1a1a;
+  --warm:#3d3830;
+  --muted:rgba(30,25,20,0.72);
+  --hint:rgba(30,25,20,0.52);
+  --rule:rgba(0,0,0,0.18);
+  --green:#6ECAAA;
+}
+body {
+  background: var(--bg);
+  font-family: 'Manrope', sans-serif;
+  color: var(--ink);
+  overflow-x: hidden;
+  padding-top: 80px;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(18px,3vh,28px) clamp(24px,4vw,52px);
+  background: var(--bg);
+}
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  letter-spacing: .04em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+.hero {
+  max-width: 1320px;
+  margin: clamp(34px,5vh,64px) auto clamp(40px,6vh,72px);
+  padding: 0 clamp(16px,3vw,40px);
+}
+.breadcrumb {
+  max-width: 980px;
+  margin: 0 auto clamp(26px,4vh,44px);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.breadcrumb a { color: var(--muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--ink); }
+.breadcrumb .sep { margin: 0 10px; color: var(--hint); }
+.webmap {
+  min-height: clamp(620px,72vh,860px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06), 0 18px 46px rgba(0,0,0,0.12);
+}
+.demo-stage {
+  position: relative;
+  min-height: 620px;
+  overflow: hidden;
+  background: #dfe5df;
+}
+.demo-stage video {
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
+  object-fit: cover;
+  display: block;
+  filter: saturate(.95) contrast(1.02);
+}
+.demo-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(0,0,0,0.25), transparent 34%),
+    linear-gradient(to right, rgba(247,246,244,0.18), transparent 35%);
+}
+.map-title {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  z-index: 2;
+  background: rgba(251,250,247,0.92);
+  border: 1px solid var(--rule);
+  padding: 12px 16px;
+  max-width: 360px;
+}
+.map-title span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.map-title strong {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+.callout {
+  position: absolute;
+  right: 32px;
+  bottom: 28px;
+  z-index: 2;
+  width: 270px;
+  background: rgba(26,26,26,0.9);
+  color: var(--paper);
+  padding: 16px;
+}
+.callout-label {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(251,250,247,0.72);
+  margin-bottom: 8px;
+}
+.callout p {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+.side-panel {
+  border-left: 1px solid var(--rule);
+  padding: clamp(28px,4vw,44px);
+  display: flex;
+  flex-direction: column;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(34px,4vw,52px);
+  font-weight: 500;
+  line-height: 1.05;
+  margin-bottom: 18px;
+}
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--warm);
+  margin-bottom: 26px;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 30px;
+}
+.tag {
+  font-size: 8px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  padding: 5px 8px;
+}
+.panel-block {
+  border-top: 1px solid var(--rule);
+  padding-top: 18px;
+  margin-top: 18px;
+}
+.panel-label {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.panel-block p {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.live-link {
+  margin-top: auto;
+  display: inline-flex;
+  width: fit-content;
+  gap: 8px;
+  align-items: center;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 3px;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.live-link::after { content: '↗'; }
+.content {
+  max-width: 980px;
+  margin: 0 auto clamp(48px,7vh,90px);
+  padding: 0 clamp(20px,5vw,52px);
+}
+.notebook-band {
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px,3vw,34px);
+  margin-bottom: clamp(34px,5vh,56px);
+}
+.note-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.note-text {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--warm);
+}
+.sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(26px,4vw,48px);
+}
+.section { margin-bottom: 12px; }
+.section-num {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.section h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(22px,2.4vw,28px);
+  font-weight: 500;
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+.section p, .section li {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  line-height: 1.85;
+}
+.section p + p { margin-top: 14px; }
+.criteria-list {
+  list-style: none;
+  margin: 14px 0;
+  padding: 14px 0;
+  border-top: .5px solid var(--rule);
+  border-bottom: .5px solid var(--rule);
+}
+.criteria-list li {
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+.criteria-list li::before { content: '-'; position: absolute; left: 0; color: var(--hint); }
+.criteria-list b {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--warm);
+  margin-right: 8px;
+}
+.footer-row {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 clamp(20px,5vw,52px) clamp(40px,6vh,80px);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.footer-row a { color: var(--muted); text-decoration: none; border-bottom: .5px solid var(--rule); padding-bottom: 2px; }
+.footer-row a:hover { color: var(--ink); }
+@media (max-width: 900px) {
+  .webmap { grid-template-columns: 1fr; }
+  .side-panel { border-left: 0; border-top: 1px solid var(--rule); }
+  .notebook-band, .sections { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .nav-links { gap: 14px; }
+  .demo-stage, .demo-stage video { min-height: 520px; }
+  .callout { right: 18px; bottom: 18px; width: 230px; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">Serena</a>
+  <div class="nav-links">
+    <a href="../index.html#hero">Home</a>
+    <a href="../index.html#about">About</a>
+    <a href="../page-work.html" class="active">Work</a>
+    <a href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</nav>
+
+<main class="hero">
+  <div class="breadcrumb"><a href="../page-work.html">Work</a><span class="sep">/</span>SafeSteps Toronto</div>
+  <section class="webmap">
+    <div class="demo-stage">
+      <video src="safestep-demo.mov" autoplay muted loop playsinline></video>
+      <div class="map-title">
+        <span>Interactive web map</span>
+        <strong>Fastest route vs safest route through Toronto</strong>
+      </div>
+      <div class="callout">
+        <div class="callout-label">User decision point</div>
+        <p>SafeSteps makes the tradeoff visible: a route can be slightly longer but meaningfully lower risk.</p>
+      </div>
+    </div>
+
+    <aside class="side-panel">
+      <div class="eyebrow">Featured project</div>
+      <h1>SafeSteps Toronto</h1>
+      <p class="lede">An interactive pedestrian safety navigator that lets users compare fastest and safer walking routes using real Toronto crime data.</p>
+      <div class="tags">
+        <span class="tag">Mapbox GL JS</span>
+        <span class="tag">Turf.js</span>
+        <span class="tag">Routing</span>
+        <span class="tag">Crime Data</span>
+        <span class="tag">GGR472</span>
+      </div>
+      <div class="panel-block">
+        <div class="panel-label">Product question</div>
+        <p>What changes when pedestrian navigation optimizes not only for time, but also for perceived and data-supported safety?</p>
+      </div>
+      <div class="panel-block">
+        <div class="panel-label">User output</div>
+        <p>Enter two places, compare route options, and understand why the recommended path is safer without opening the source code.</p>
+      </div>
+      <a class="live-link" href="https://serena8886.github.io/serena-safesteps/" target="_blank" rel="noopener">View live site</a>
+    </aside>
+  </section>
+</main>
+
+<section class="content">
+  <div class="notebook-band">
+    <div>
+      <div class="note-label">01 · Question</div>
+      <div class="note-text">Fastest is not always safest. Most navigation tools optimize for time, but walking comfort is shaped by safety, lighting, traffic, and local context.</div>
+    </div>
+    <div>
+      <div class="note-label">02 · Data</div>
+      <div class="note-text">Toronto Police Service crime data is cleaned, spatially matched to walking-route segments, and translated into a risk signal users can actually interpret.</div>
+    </div>
+    <div>
+      <div class="note-label">03 · Interface</div>
+      <div class="note-text">The map keeps the model legible: users can compare routes and see the reasoning without reading GitHub or trusting a black box.</div>
+    </div>
+  </div>
+
+  <div class="sections">
+    <div class="section">
+      <div class="section-num">01 · Brief</div>
+      <h2>A walking route is a decision, not just a line</h2>
+      <p>SafeSteps starts from a common urban problem: the shortest path may not be the path someone feels comfortable taking. The project reframes routing as a tradeoff between efficiency and safety.</p>
+      <p>The interface is designed for quick comparison. A user enters an origin and destination, then sees routes scored and visualized in a way that makes the difference understandable.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-num">02 · Method</div>
+      <h2>Turning incident geography into route scoring</h2>
+      <ul class="criteria-list">
+        <li><b>Routes</b>Generate candidate walking paths between two user-entered locations.</li>
+        <li><b>Segments</b>Break routes into smaller pieces so risk can be assessed locally rather than as one blunt average.</li>
+        <li><b>Scoring</b>Compare route geometry with nearby crime incident patterns from public safety data.</li>
+        <li><b>Display</b>Return fastest and safer alternatives with a visible explanation of the tradeoff.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-num">03 · Finding</div>
+      <h2>The safest route needs to explain itself</h2>
+      <p>A safety recommendation is only useful if the user can understand it quickly. SafeSteps avoids hiding the decision inside an algorithmic score and instead treats map design as part of the analysis.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-num">04 · Limitation</div>
+      <h2>Safety data is never the whole story</h2>
+      <p>Crime data is an imperfect proxy for pedestrian safety. A real deployment would also benefit from lighting, street activity, sidewalk quality, traffic exposure, time of day, and community reporting.</p>
+    </div>
+  </div>
+</section>
+
+<div class="footer-row">
+  <a href="../page-work.html">&larr; All work</a>
+  <a href="https://serena8886.github.io/serena-safesteps/" target="_blank" rel="noopener">Live site &nearr;</a>
+</div>
+
+<script>
+window.addEventListener('load', () => { document.body.style.opacity = '1'; });
+</script>
+</body>
+</html>

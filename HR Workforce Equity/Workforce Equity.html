@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Childcare × Workforce Map — Serena</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+:root {
+  --bg:#f7f6f4;
+  --paper:#fbfaf7;
+  --ink:#1a1a1a;
+  --warm:#3d3830;
+  --muted:rgba(30,25,20,0.72);
+  --hint:rgba(30,25,20,0.52);
+  --rule:rgba(0,0,0,0.18);
+  --green:#6ECAAA;
+  --rose:#c76d6d;
+  --gold:#d7ad63;
+}
+body {
+  background: var(--bg);
+  font-family: 'Manrope', sans-serif;
+  color: var(--ink);
+  overflow-x: hidden;
+  padding-top: 80px;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(18px,3vh,28px) clamp(24px,4vw,52px);
+  background: var(--bg);
+}
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  letter-spacing: .04em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+.hero {
+  max-width: 1320px;
+  margin: clamp(34px,5vh,64px) auto clamp(40px,6vh,72px);
+  padding: 0 clamp(16px,3vw,40px);
+}
+.breadcrumb {
+  max-width: 980px;
+  margin: 0 auto clamp(26px,4vh,44px);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.breadcrumb a { color: var(--muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--ink); }
+.breadcrumb .sep { margin: 0 10px; color: var(--hint); }
+
+/* ── Webmap embed ───────────────────────────────────── */
+.webmap {
+  min-height: clamp(620px,72vh,860px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.06), 0 18px 46px rgba(0,0,0,0.12);
+  position: relative;
+}
+.map-stage {
+  position: relative;
+  overflow: hidden;
+  min-height: 620px;
+  background: #e8e8e4;
+}
+#map {
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
+  background: #f0eee9;
+}
+.leaflet-container { font-family: 'Manrope', sans-serif; }
+.leaflet-control-attribution {
+  font-size: 9px;
+  background: rgba(251,250,247,0.9);
+  color: var(--muted);
+}
+.leaflet-tooltip.nb-tip {
+  background: rgba(26,26,26,0.93);
+  color: var(--paper);
+  border: 0;
+  padding: 9px 12px;
+  border-radius: 0;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.leaflet-tooltip.nb-tip::before { display: none; }
+.nb-tip strong {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
+}
+.nb-tip .row { display: flex; justify-content: space-between; gap: 12px; }
+.nb-tip .row span:first-child {
+  color: rgba(251,250,247,0.6);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: 9px;
+}
+.nb-tip .cls-pill {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.25);
+  margin-top: 6px;
+}
+
+.map-title {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  z-index: 401;
+  background: rgba(251,250,247,0.94);
+  border: 1px solid var(--rule);
+  padding: 12px 16px;
+  max-width: 320px;
+}
+.map-title span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.map-title strong {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.legend {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+  z-index: 401;
+  background: rgba(251,250,247,0.94);
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
+  width: 220px;
+}
+.legend-title {
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+.legend-grid-wrap {
+  display: grid;
+  grid-template-columns: 14px 64px;
+  grid-template-rows: 64px 14px;
+  gap: 4px 6px;
+  align-items: center;
+}
+.legend-grid {
+  grid-row: 1; grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 20px);
+  grid-template-rows: repeat(3, 20px);
+  gap: 2px;
+}
+.legend-grid span { display: block; }
+.legend-y, .legend-x {
+  font-size: 8px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.legend-y { grid-row: 1; grid-column: 1; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; }
+.legend-x { grid-row: 2; grid-column: 2; text-align: center; }
+.legend-note {
+  font-family: 'Fraunces', serif;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--warm);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+}
+
+.callout {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  z-index: 401;
+  width: 250px;
+  background: rgba(26,26,26,0.9);
+  color: var(--paper);
+  padding: 14px;
+}
+.callout-label {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(251,250,247,0.72);
+  margin-bottom: 8px;
+}
+.callout p {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.side-panel {
+  border-left: 1px solid var(--rule);
+  padding: clamp(28px,4vw,44px);
+  display: flex;
+  flex-direction: column;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(32px,3.6vw,46px);
+  font-weight: 500;
+  line-height: 1.05;
+  margin-bottom: 18px;
+}
+.lede {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--warm);
+  margin-bottom: 24px;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 26px;
+}
+.tag {
+  font-size: 8px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  padding: 5px 8px;
+}
+.panel-block {
+  border-top: 1px solid var(--rule);
+  padding-top: 16px;
+  margin-top: 16px;
+}
+.panel-label {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.panel-block p {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.live-link {
+  margin-top: auto;
+  display: inline-flex;
+  width: fit-content;
+  gap: 8px;
+  align-items: center;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 3px;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  padding-top: 20px;
+}
+.live-link::after { content: '↗'; }
+
+.content {
+  max-width: 980px;
+  margin: 0 auto clamp(48px,7vh,90px);
+  padding: 0 clamp(20px,5vw,52px);
+}
+.notebook-band {
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(18px,3vw,34px);
+  margin-bottom: clamp(34px,5vh,56px);
+}
+.note-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 7px;
+}
+.note-text {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--warm);
+}
+.sections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(26px,4vw,48px);
+}
+.section { margin-bottom: 12px; }
+.section-num {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.section h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(22px,2.4vw,28px);
+  font-weight: 500;
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+.section p, .section li {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  line-height: 1.85;
+}
+.section p + p { margin-top: 14px; }
+.criteria-list {
+  list-style: none;
+  margin: 14px 0;
+  padding: 14px 0;
+  border-top: .5px solid var(--rule);
+  border-bottom: .5px solid var(--rule);
+}
+.criteria-list li {
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+.criteria-list li::before { content: '-'; position: absolute; left: 0; color: var(--hint); }
+.criteria-list b {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--warm);
+  margin-right: 8px;
+}
+.footer-row {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 clamp(20px,5vw,52px) clamp(40px,6vh,80px);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.footer-row a { color: var(--muted); text-decoration: none; border-bottom: .5px solid var(--rule); padding-bottom: 2px; }
+.footer-row a:hover { color: var(--ink); }
+@media (max-width: 900px) {
+  .webmap { grid-template-columns: 1fr; }
+  .side-panel { border-left: 0; border-top: 1px solid var(--rule); }
+  .notebook-band, .sections { grid-template-columns: 1fr; }
+  .map-stage, #map { min-height: 520px; }
+  .callout { right: 18px; bottom: 18px; width: 220px; }
+  .legend { left: 18px; bottom: 18px; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">Serena</a>
+  <div class="nav-links">
+    <a href="../index.html#hero">Home</a>
+    <a href="../index.html#about">About</a>
+    <a href="../page-work.html" class="active">Work</a>
+    <a href="https://linkedin.com/in/serena-xie-203477286" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</nav>
+
+<main class="hero">
+  <div class="breadcrumb"><a href="../page-work.html">Work</a><span class="sep">/</span>The Childcare × Workforce Map</div>
+  <section class="webmap">
+    <div class="map-stage" aria-label="Interactive bivariate choropleth: Toronto childcare access × workforce participation">
+      <div id="map"></div>
+
+      <div class="legend" aria-label="Bivariate legend">
+        <div class="legend-title">Legend</div>
+        <div class="legend-grid-wrap">
+          <div class="legend-y">LFP →</div>
+          <div class="legend-grid">
+            <span style="background:#c0625b"></span><span style="background:#9a6c5e"></span><span style="background:#4f7766"></span>
+            <span style="background:#dcb39c"></span><span style="background:#bba98b"></span><span style="background:#7f9f7a"></span>
+            <span style="background:#efe8d4"></span><span style="background:#cdd7b9"></span><span style="background:#9bc69e"></span>
+          </div>
+          <div class="legend-x">Daycare →</div>
+        </div>
+        <div class="legend-note">Deepest red-orange = high participation but low daycare access. That's the employer-action cell.</div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-label">Employer action zone</div>
+        <p>37 of 151 Toronto neighbourhoods show a workforce–childcare mismatch where benefits design should move beyond generic subsidy.</p>
+      </div>
+    </div>
+
+    <aside class="side-panel">
+      <div class="eyebrow">HR web project</div>
+      <h1>The Childcare × Workforce Map</h1>
+      <p class="lede">An interactive bivariate web map of Toronto. Each of the City's 158 neighbourhoods is encoded on two axes at once: labour-force participation and daycare access within 5 km. The mismatch cells are where benefits design has the strongest business case.</p>
+      <div class="tags">
+        <span class="tag">Leaflet</span>
+        <span class="tag">Bivariate Choropleth</span>
+        <span class="tag">DEI</span>
+        <span class="tag">Benefits Design</span>
+        <span class="tag">Toronto Open Data</span>
+        <span class="tag">Census 2021</span>
+      </div>
+      <div class="panel-block">
+        <div class="panel-label">Business question</div>
+        <p>If a company opens an office in this neighbourhood, does the local childcare market match the workforce it wants to hire and retain?</p>
+      </div>
+      <div class="panel-block">
+        <div class="panel-label">Decision output</div>
+        <p>Flag neighbourhoods where high labour participation overlaps with low daycare access. Recommend onsite daycare, childcare stipends, or reserved-seat partnerships.</p>
+      </div>
+      <a class="live-link" href="https://serena8886.github.io/Toronto-Child-Care/" target="_blank" rel="noopener">View live site</a>
+    </aside>
+  </section>
+</main>
+
+<section class="content">
+  <div class="notebook-band">
+    <div>
+      <div class="note-label">Why now</div>
+      <div class="note-text">Canada's $10/day childcare program lowers the price of a daycare seat but doesn't increase supply. Where supply lags, employer-funded benefit closes the gap.</div>
+    </div>
+    <div>
+      <div class="note-label">HR angle</div>
+      <div class="note-text">Not a public-policy map. A site-selection and retention tool for DEI, benefits, and workforce-planning teams making real budget decisions.</div>
+    </div>
+    <div>
+      <div class="note-label">Killer insight</div>
+      <div class="note-text">Four Toronto neighbourhoods sit in the "high LFP × low daycare" cell — the case for employer-side childcare investment is strongest there.</div>
+    </div>
+  </div>
+
+  <div class="sections">
+    <div class="section">
+      <div class="section-num">01 · Concept</div>
+      <h2>Childcare as workforce infrastructure</h2>
+      <p>The map encodes two variables at the same time: labour-force participation rate from Census 2021, and the number of licensed daycare centres within five kilometres of each neighbourhood centroid as of May 2026.</p>
+      <p>The output is a bivariate choropleth. Instead of showing each variable on its own map, the colour scheme makes the mismatch visible at a glance — and the off-diagonal cells are where employer-side decisions live.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-num">02 · Data</div>
+      <h2>The layers behind the web map</h2>
+      <ul class="criteria-list">
+        <li><b>Boundary</b>City of Toronto Open Data — 158 social-planning neighbourhoods, aligned to StatCan census tracts.</li>
+        <li><b>Workforce</b>Census 2021 participation rate, aggregated by the City via the 158-model Neighbourhood Profiles dataset.</li>
+        <li><b>Daycare</b>City of Toronto Licensed Child Care Centres (May 2026) — 1,086 active centres, 85,276 licensed seats, with a CWELCC ($10/day) enrolment flag.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-num">03 · Recommendation logic</div>
+      <h2>From map colour to HR action</h2>
+      <p>Each axis is split at the 33rd and 67th percentiles of the Toronto distribution, producing a 3×3 matrix. Diagonal cells are the expected pattern; off-diagonal cells are where decisions live.</p>
+      <p>For high-LFP, low-daycare neighbourhoods, the map recommends onsite daycare, negotiated childcare partnerships, childcare stipends, or reserved seats — translating spatial signal into concrete benefits-design action.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-num">04 · Why this works as a portfolio piece</div>
+      <h2>GIS meets HR strategy</h2>
+      <p>The project sits at the intersection of spatial analysis and people strategy. Census 2021 is the most recent labour data at this geography — when Census 2026 publishes in 2027–2028, the same pipeline becomes a before/after evaluation of the $10/day program's spatial impact.</p>
+    </div>
+  </div>
+</section>
+
+<div class="footer-row">
+  <a href="../page-work.html">&larr; All work</a>
+  <span>Web map · Serena Xie · Toronto Open Data</span>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const FILL = {
+  a1:'#efe8d4', a2:'#cdd7b9', a3:'#9bc69e',
+  b1:'#dcb39c', b2:'#bba98b', b3:'#7f9f7a',
+  c1:'#c0625b', c2:'#9a6c5e', c3:'#4f7766',
+};
+
+const map = L.map('map', {
+  zoomControl: true,
+  attributionControl: true,
+  preferCanvas: true,
+  minZoom: 10,
+  maxZoom: 14,
+  scrollWheelZoom: false,
+}).setView([43.71, -79.39], 11);
+
+map.on('click', () => map.scrollWheelZoom.enable());
+map.on('mouseout', () => map.scrollWheelZoom.disable());
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap · © CARTO',
+  subdomains: 'abcd',
+}).addTo(map);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+  attribution: '',
+  subdomains: 'abcd',
+  pane: 'shadowPane',
+}).addTo(map);
+
+function style(p){
+  return {
+    fillColor: FILL[p.bv_class] || '#dddbd2',
+    fillOpacity: 0.82,
+    color: 'rgba(40,40,40,0.45)',
+    weight: 0.6,
+  };
+}
+
+function tip(p){
+  return `<strong>${p.nb_name}</strong>
+    <div class="row"><span>LFP</span><span>${p.lfp.toFixed(1)}%</span></div>
+    <div class="row"><span>Daycare ≤ 5km</span><span>${p.daycare_count_5km}</span></div>
+    <div class="row"><span>$10/day seats</span><span>${(p.cwelcc_share*100).toFixed(0)}%</span></div>
+    <span class="cls-pill">${p.priority.toUpperCase()} · ${p.bv_class}</span>`;
+}
+
+function renderLayer(geo){
+  L.geoJSON(geo, {
+    style: f => style(f.properties),
+    onEachFeature: (feat, ly) => {
+      ly.bindTooltip(tip(feat.properties), {className:'nb-tip', sticky:true, direction:'top', offset:[0,-8]});
+      ly.on({
+        mouseover: e => { e.target.setStyle({weight: 1.4, color: '#1a1a1a', fillOpacity: 0.95}); e.target.bringToFront(); },
+        mouseout:  e => e.target.setStyle(style(feat.properties)),
+      });
+    },
+  }).addTo(map);
+}
+
+if (window.CHILDCARE_DATA) {
+  renderLayer(window.CHILDCARE_DATA);
+} else {
+  fetch('childcare-toronto.geojson').then(r => r.json()).then(renderLayer).catch(()=>{});
+}
+
+window.addEventListener('load', () => { document.body.style.opacity = '1'; });
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Work — Serena Xie</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -20,7 +20,7 @@ html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   color: var(--ink);
   overflow-x: hidden;
   opacity: 0;
@@ -40,7 +40,7 @@ nav {
 }
 
 .nav-logo {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 17px;
   font-weight: 400;
   letter-spacing: .04em;
@@ -65,7 +65,7 @@ nav {
   cursor: pointer;
   border: none;
   background: none;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
 }
 .nav-links a:hover,
 .nav-links a.active { color: var(--ink); }
@@ -112,6 +112,64 @@ nav {
   font-size: 9px; letter-spacing: .18em;
   text-transform: uppercase; color: var(--muted);
 }
+.childcare-preview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px),
+    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+    #e7ebe4;
+  background-size: 68px 68px;
+}
+.childcare-tracts {
+  position: absolute;
+  inset: 32px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 5px;
+  transform: rotate(-3deg) skew(-4deg);
+}
+.childcare-tracts span {
+  border: 1px solid rgba(255,255,255,0.72);
+  min-height: 38px;
+}
+.c-a1 { background: #f1e5cf; }
+.c-a2 { background: #d7d9bd; }
+.c-a3 { background: #9fc8a9; }
+.c-b1 { background: #d7b1a2; }
+.c-b2 { background: #bdab91; }
+.c-b3 { background: #829f85; }
+.c-c1 { background: #c76d6d; }
+.c-c2 { background: #9f7568; }
+.c-c3 { background: #5f7b69; }
+.childcare-overlay {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  width: min(300px, calc(100% - 48px));
+  background: rgba(251,250,247,0.93);
+  border: 1px solid var(--border);
+  padding: 14px;
+}
+.childcare-overlay span {
+  display: block;
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.childcare-overlay strong {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--ink);
+  font-weight: 600;
+}
 
 .featured-body {
   padding: clamp(32px,5vw,64px) clamp(24px,4vw,56px);
@@ -130,14 +188,14 @@ nav {
   background: var(--muted);
 }
 .featured-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: clamp(52px,6vw,80px);
   font-weight: 300; line-height: 1;
   color: var(--ink); letter-spacing: -.02em;
   margin-bottom: 16px;
 }
 .featured-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: clamp(22px,2.8vw,32px);
   font-weight: 600; color: var(--ink);
   line-height: 1.25; margin-bottom: 16px;
@@ -145,7 +203,7 @@ nav {
 }
 .featured-card:hover .featured-title { color: #6ECAAA; }
 .featured-desc {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 14px; font-weight: 300;
   line-height: 1.9; color: var(--warm);
   margin-bottom: 28px; max-width: 380px;
@@ -234,7 +292,7 @@ nav {
 }
 
 .card-num {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 11px;
   font-weight: 300;
   color: var(--muted);
@@ -243,7 +301,7 @@ nav {
 }
 
 .card-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: clamp(18px,2.2vw,22px);
   font-weight: 600;
   color: var(--ink);
@@ -254,7 +312,7 @@ nav {
 .work-card:hover .card-title { color: #6ECAAA; }
 
 .card-desc {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 12px;
   font-weight: 300;
   line-height: 1.8;
@@ -304,7 +362,7 @@ footer {
 }
 
 .footer-name {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 13px;
   font-weight: 300;
   font-style: italic;
@@ -337,18 +395,57 @@ footer {
   </div>
 </nav>
 
-<!-- ── Featured project ─────────────────────────────── -->
-<a class="featured-card" href="https://serena8886.github.io/serena-safesteps/" target="_blank" rel="noopener">
+<!-- ── Featured web project: Childcare ──────────────── -->
+<a class="featured-card" href="HR Workforce Equity/Workforce Equity.html">
+  <div class="featured-thumb">
+    <div class="childcare-preview" aria-label="Bivariate childcare workforce map preview">
+      <div class="childcare-tracts">
+        <span class="c-a1"></span><span class="c-a2"></span><span class="c-b1"></span><span class="c-b2"></span><span class="c-c1"></span><span class="c-c2"></span><span class="c-b3"></span><span class="c-a3"></span><span class="c-a2"></span>
+        <span class="c-a2"></span><span class="c-b2"></span><span class="c-b1"></span><span class="c-c1"></span><span class="c-c2"></span><span class="c-c3"></span><span class="c-b3"></span><span class="c-a3"></span><span class="c-a1"></span>
+        <span class="c-b1"></span><span class="c-b2"></span><span class="c-c2"></span><span class="c-c1"></span><span class="c-c1"></span><span class="c-b2"></span><span class="c-b3"></span><span class="c-a2"></span><span class="c-a1"></span>
+        <span class="c-a1"></span><span class="c-b1"></span><span class="c-c1"></span><span class="c-c2"></span><span class="c-b2"></span><span class="c-a2"></span><span class="c-a3"></span><span class="c-b3"></span><span class="c-c3"></span>
+        <span class="c-a1"></span><span class="c-a2"></span><span class="c-b2"></span><span class="c-c2"></span><span class="c-c3"></span><span class="c-b3"></span><span class="c-a3"></span><span class="c-a2"></span><span class="c-b1"></span>
+        <span class="c-b1"></span><span class="c-c1"></span><span class="c-c2"></span><span class="c-b2"></span><span class="c-a2"></span><span class="c-a1"></span><span class="c-a2"></span><span class="c-b3"></span><span class="c-c3"></span>
+      </div>
+      <div class="childcare-overlay">
+        <span>Bivariate web map</span>
+        <strong>Childcare access × women's labour participation</strong>
+      </div>
+    </div>
+  </div>
+  <div class="featured-body">
+    <span class="featured-eyebrow">Featured Web Project</span>
+    <div class="featured-num">00</div>
+    <h2 class="featured-title">The Childcare × Workforce Map</h2>
+    <p class="featured-desc">
+      A bivariate web map for DEI, benefits design, and workforce planning.
+      It flags census tracts where childcare access and women's labour
+      participation are mismatched, turning spatial analysis into employer action.
+    </p>
+    <div class="featured-tags">
+      <span class="tag">Web Map</span>
+      <span class="tag">DEI</span>
+      <span class="tag">Benefits Design</span>
+      <span class="tag">Workforce Planning</span>
+    </div>
+    <div class="featured-links">
+      <span class="featured-btn primary">View project</span>
+    </div>
+  </div>
+</a>
+
+<!-- ── Featured web project: SafeSteps ───────────────── -->
+<a class="featured-card" href="safestep/SafeSteps.html">
   <div class="featured-thumb">
     <video
-      src="safestep-demo.mov"
+      src="safestep/safestep-demo.mov"
       autoplay muted loop playsinline
       style="width:100%;height:100%;object-fit:cover;display:block;"
     ></video>
   </div>
   <div class="featured-body">
-    <span class="featured-eyebrow">Featured Project</span>
-    <div class="featured-num">00</div>
+    <span class="featured-eyebrow">Featured Web Project</span>
+    <div class="featured-num">01</div>
     <h2 class="featured-title">SafeSteps Toronto</h2>
     <p class="featured-desc">
       An interactive pedestrian safety navigator for Toronto.
@@ -364,7 +461,7 @@ footer {
       <span class="tag">GGR472</span>
     </div>
     <div class="featured-links">
-      <span class="featured-btn primary">View live site</span>
+      <span class="featured-btn primary">View project</span>
     </div>
   </div>
 </a>
@@ -378,7 +475,7 @@ footer {
       <img src="Halifax/Layout2.jpg" alt="Halifax LRT">
     </div>
     <div class="card-body">
-      <p class="card-num">01</p>
+      <p class="card-num">02</p>
       <h3 class="card-title">Halifax LRT — Least Cost Path Analysis</h3>
       <p class="card-desc">GIS-based multi-criteria route optimisation for a proposed Light Rail Transit corridor in Halifax Regional Municipality.</p>
       <div class="card-tags">
@@ -397,7 +494,7 @@ footer {
       <img src="Toronto Shoppers Map/map.jpg" alt="Toronto Shoppers Map">
     </div>
     <div class="card-body">
-      <p class="card-num">02</p>
+      <p class="card-num">03</p>
       <h3 class="card-title">Toronto Shoppers Map</h3>
       <p class="card-desc">Spatial analysis of retail distribution and shopping accessibility across Toronto neighbourhoods.</p>
       <div class="card-tags">
@@ -415,7 +512,7 @@ footer {
       <img src="Infanity Rate/Infant Mortality Rates.jpg" alt="Health Mapping & Spatial Cluster Analysis">
     </div>
     <div class="card-body">
-      <p class="card-num">03</p>
+      <p class="card-num">04</p>
       <h3 class="card-title">Health Mapping &amp; Spatial Cluster Analysis</h3>
       <p class="card-desc">Choropleth mapping of infant mortality rates across Ontario and LISA cluster analysis of child and senior road collision risks.</p>
       <div class="card-tags">

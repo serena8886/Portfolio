@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Halifax LRT — Serena</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -22,7 +22,7 @@ html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   color: var(--ink);
   overflow-x: hidden;
   padding-top: 80px;
@@ -42,7 +42,7 @@ nav {
   background: var(--bg);
 }
 .nav-logo {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 17px;
   font-weight: 400;
   letter-spacing: .04em;
@@ -51,7 +51,7 @@ nav {
 }
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 10px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -68,7 +68,7 @@ nav {
   padding: 0 clamp(20px,5vw,52px);
 }
 .breadcrumb {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 11px;
   letter-spacing: .22em;
   text-transform: uppercase;
@@ -86,7 +86,7 @@ nav {
   padding-bottom: 14px;
   border-bottom: 1px solid var(--ink);
   margin-bottom: 28px;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   letter-spacing: .22em;
   text-transform: uppercase;
@@ -97,9 +97,12 @@ nav {
   padding: 4px 11px;
   display: inline-block;
   transform: rotate(-1.2deg);
+  background:
+    linear-gradient(104deg, rgba(255,239,128,0) 2%, rgba(255,239,128,0.76) 8%, rgba(255,239,128,0.55) 88%, rgba(255,239,128,0) 96%);
+  box-shadow: inset 0 -8px 0 rgba(255,239,128,0.32);
 }
 .page-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: clamp(34px, 5vw, 56px);
   font-weight: 400;
   line-height: 1.1;
@@ -107,7 +110,7 @@ nav {
   margin-bottom: 8px;
 }
 .page-subtitle {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: clamp(17px, 2vw, 22px);
   font-style: italic;
   font-weight: 400;
@@ -117,7 +120,7 @@ nav {
   max-width: 720px;
 }
 .header-tags {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 11px;
   letter-spacing: .22em;
   text-transform: uppercase;
@@ -127,12 +130,12 @@ nav {
 
 /* ── Annotated map section ───────────────────────────── */
 .annotated {
-  max-width: 980px;
+  max-width: 1320px;
   margin: 0 auto clamp(40px,6vh,72px);
-  padding: 0 clamp(20px,5vw,52px);
+  padding: 0 clamp(16px,3vw,40px);
 }
 .section-eyebrow {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 11px;
   letter-spacing: .25em;
   text-transform: uppercase;
@@ -152,6 +155,9 @@ nav {
 .map-wrap img {
   width: 100%;
   display: block;
+  aspect-ratio: 2338 / 1653;
+  object-fit: contain;
+  background: var(--paper);
 }
 .pin {
   position: absolute;
@@ -163,7 +169,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -174,7 +180,7 @@ nav {
 .pin:hover { transform: translate(-50%, -50%) scale(1.12); }
 
 .map-caption {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 15px;
   font-style: italic;
   color: var(--muted);
@@ -203,14 +209,14 @@ nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 13px;
   font-weight: 500;
   margin-top: 2px;
 }
 .pin-note-body { flex: 1; }
 .pin-note-label {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   font-weight: 500;
   letter-spacing: .18em;
@@ -219,7 +225,7 @@ nav {
   margin-right: 10px;
 }
 .pin-note-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 17px;
   line-height: 1.7;
   color: var(--ink);
@@ -233,25 +239,23 @@ nav {
 }
 .journal-grid {
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: clamp(28px,4vw,52px);
-  align-items: start;
-}
-@media (max-width: 760px) {
-  .journal-grid { grid-template-columns: 1fr; gap: 24px; }
+  grid-template-columns: 1fr;
+  gap: clamp(28px,4vw,44px);
 }
 
 /* Left margin: observations, sketches, surprises */
 .margin-col {
-  border-right: 1px solid var(--rule);
-  padding-right: clamp(16px,2vw,28px);
-}
-@media (max-width: 760px) {
-  .margin-col { border-right: 0; border-top: 1px solid var(--rule); padding-right: 0; padding-top: 18px; order: 2; }
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 18px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: clamp(18px,3vw,34px);
 }
 .margin-block { margin-bottom: 28px; }
+.margin-block:last-child { margin-bottom: 0; }
 .margin-label {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: .25em;
@@ -260,14 +264,14 @@ nav {
   margin-bottom: 7px;
 }
 .margin-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 16px;
   font-style: italic;
   line-height: 1.65;
   color: var(--warm);
 }
 .margin-date {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 11px;
   letter-spacing: .15em;
   color: var(--hint);
@@ -287,10 +291,15 @@ nav {
 }
 
 /* Main column: numbered sections */
-.main-col { padding-top: 4px; }
+.main-col {
+  padding-top: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px,4vw,44px);
+}
 .j-section { margin-bottom: clamp(28px,4vh,40px); }
 .j-section-num {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   font-weight: 500;
   letter-spacing: .25em;
@@ -299,7 +308,7 @@ nav {
   margin-bottom: 10px;
 }
 .j-section-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: clamp(22px, 2.4vw, 28px);
   font-weight: 500;
   line-height: 1.25;
@@ -307,7 +316,7 @@ nav {
   color: var(--ink);
 }
 .j-section-body {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 17px;
   font-weight: 400;
   line-height: 1.85;
@@ -329,7 +338,7 @@ nav {
   border-bottom: 0.5px solid var(--rule);
 }
 .criteria-list li {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 15px;
   line-height: 1.7;
   padding: 4px 0 4px 18px;
@@ -343,7 +352,7 @@ nav {
   color: var(--hint);
 }
 .criteria-list li b {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   letter-spacing: .18em;
   text-transform: uppercase;
@@ -362,10 +371,11 @@ nav {
   border: 1px solid var(--rule);
   padding: 14px;
   border-radius: 2px;
+  grid-column: 1 / -1;
 }
 .j-figure img { width: 100%; display: block; }
 .j-figure figcaption {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   letter-spacing: .15em;
   text-transform: uppercase;
@@ -387,7 +397,7 @@ nav {
   border-top: 1px solid var(--ink);
 }
 .refs-heading {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   font-weight: 500;
   letter-spacing: .3em;
@@ -400,7 +410,7 @@ nav {
   counter-reset: ref;
 }
 .refs li {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Fraunces', serif;
   font-size: 15px;
   line-height: 1.75;
   padding: 8px 0 8px 32px;
@@ -413,7 +423,7 @@ nav {
   position: absolute;
   left: 0;
   top: 8px;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   letter-spacing: .1em;
   color: var(--muted);
@@ -430,7 +440,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -438,6 +448,10 @@ nav {
 }
 .footer-row a { color: var(--muted); text-decoration: none; border-bottom: 0.5px solid var(--rule); padding-bottom: 2px; transition: color .2s; }
 .footer-row a:hover { color: var(--ink); }
+@media (max-width: 760px) {
+  .header-row, .footer-row { gap: 12px; flex-direction: column; align-items: flex-start; }
+  .margin-col, .main-col { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -465,9 +479,6 @@ nav {
   </div>
   <h1 class="page-title">Least Cost Path Analysis</h1>
   <p class="page-subtitle">A proposed Light Rail Transit route through the Halifax Regional Municipality — and what its alignment quietly reveals about the city already built.</p>
-  <div class="header-tags">
-    <span>GGR273</span><span>Independent project</span><span>ArcGIS Pro</span><span>2026</span>
-  </div>
 </header>
 
 <!-- ── Annotated map (Idea 3) ──────────────────────────── -->
