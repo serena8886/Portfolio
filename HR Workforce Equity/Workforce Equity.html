@@ -486,8 +486,8 @@ h1 {
       <div class="note-text">Not a public-policy map. A site-selection and retention tool for DEI, benefits, and workforce-planning teams making real budget decisions.</div>
     </div>
     <div>
-      <div class="note-label">Killer insight</div>
-      <div class="note-text">Four Toronto neighbourhoods sit in the "high LFP × low daycare" cell — the case for employer-side childcare investment is strongest there.</div>
+      <div class="note-label">Initial reading</div>
+      <div class="note-text">Four Toronto neighbourhoods land in the high-LFP × low-daycare cell. That's the directional signal — pending a weighting that turns participation rates into absolute workforce headcounts.</div>
     </div>
   </div>
 
@@ -517,9 +517,11 @@ h1 {
     </div>
 
     <div class="section">
-      <div class="section-num">04 · Why this works as a portfolio piece</div>
-      <h2>GIS meets HR strategy</h2>
-      <p>The project sits at the intersection of spatial analysis and people strategy. Census 2021 is the most recent labour data at this geography — when Census 2026 publishes in 2027–2028, the same pipeline becomes a before/after evaluation of the $10/day program's spatial impact.</p>
+      <div class="section-num">04 · Limitations &amp; next iteration</div>
+      <h2>What the current map does not yet see</h2>
+      <p>The biggest weakness of this build is that labour-force participation is a rate, not a headcount. A neighbourhood of 50,000 residents at 65% participation contains a far larger absolute pool of working parents than a neighbourhood of 5,000 at 70% — yet the colour scheme treats them as comparable. For a company actually deciding where to fund childcare, what matters is the absolute number of potentially affected employees, not the ratio.</p>
+      <p>A more decision-useful next pass would weight the y-axis by population — or replace participation rate with a control variable closer to the question being asked: working-age population 20–44 for workforce supply, or the 0–4 child population for family demand. The 5 km buffer also assumes daycare is sourced near home rather than near work, which is a reasonable first cut but not true for every commute pattern.</p>
+      <p>Until those refinements are in, the colour is best read as a directional signal, not a ranking.</p>
     </div>
   </div>
 </section>
