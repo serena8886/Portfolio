@@ -540,8 +540,20 @@ body.intro-active {
 
 <script>
 /* ── Page fade-in + intro drawer sequence on load ── */
+const wantsContact = sessionStorage.getItem('openContact') === '1';
+
 window.addEventListener('load', () => {
   document.body.style.opacity = '1';
+
+  // If the user clicked "Contact" from another page, skip the intro animation
+  // and pop the contact overlay immediately.
+  if (wantsContact) {
+    sessionStorage.removeItem('openContact');
+    document.getElementById('intro-overlay').classList.add('gone');
+    openContact();
+    return;
+  }
+
   document.body.classList.add('intro-active');
 
   // ── Edit the welcome text here ──
@@ -584,10 +596,6 @@ function closeContact() {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeContact();
 });
-if (sessionStorage.getItem('openContact') === '1') {
-  sessionStorage.removeItem('openContact');
-  openContact();
-}
 
 /* ── Fade-in on scroll ── */
 const lines = document.querySelectorAll('.fade-line');
