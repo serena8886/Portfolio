@@ -483,11 +483,11 @@ body.intro-active {
     <p id="tw-intro"></p>
     <ul class="about-list fade-line">
       <li>Curious about how people decide, work, and move — in offices and across cities</li>
-      <li>A University of Toronto student — Human Resources major, GIS minor</li>
+      <li>A University of Toronto student — Work and Organizations major, GIS minor</li>
       <li>Equally at home in people analytics and spatial analysis — same rigor, different lens</li>
       <li>A certified diver who looks for structure beneath the surface — in data, oceans, and organizations</li>
     </ul>
-    <p class="fade-line">I work where Human Resources meets GIS — bringing analytical rigor to both how people work and how places function. My maps explore urban accessibility, food equity, and public health across Canadian cities; my HR focus is on workforce equity and the patterns that move people through organizations.</p>
+    <p class="fade-line">I work where Work and Organizations meets GIS — bringing analytical rigor to both how people work and how places function. My maps explore urban accessibility, food equity, and public health across Canadian cities; my Work and Organizations focus is on workforce equity and the patterns that move people through organizations.</p>
   </div>
   <p class="skills-label fade-line">Technical Skills</p>
   <div class="skills-row">
@@ -553,6 +553,7 @@ body.intro-active {
 <script>
 /* ── Page fade-in + intro drawer sequence on load ── */
 const wantsContact = sessionStorage.getItem('openContact') === '1';
+const wantsAbout = window.location.hash === '#about';
 
 window.addEventListener('load', () => {
   document.body.style.opacity = '1';
@@ -563,6 +564,14 @@ window.addEventListener('load', () => {
     sessionStorage.removeItem('openContact');
     document.getElementById('intro-overlay').classList.add('gone');
     openContact();
+    return;
+  }
+
+  // If the user is deep-linking to #about (e.g. clicking "About Me" from
+  // the Work page), skip the intro overlay entirely — no black screen,
+  // land directly on the About section.
+  if (wantsAbout) {
+    document.getElementById('intro-overlay').style.display = 'none';
     return;
   }
 

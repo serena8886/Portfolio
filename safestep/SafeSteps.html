@@ -234,6 +234,27 @@ h1 {
   text-transform: uppercase;
 }
 .live-link::after { content: '↗'; }
+
+/* Title doubles as a link to the live map */
+.title-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color .25s;
+}
+.title-link::after {
+  content: '↗';
+  font-family: 'Jost', sans-serif;
+  font-size: 0.42em;
+  font-weight: 400;
+  color: var(--muted);
+  vertical-align: super;
+  margin-left: 0.18em;
+  display: inline-block;
+  transition: color .25s, transform .25s;
+}
+.title-link:hover { color: var(--warm); }
+.title-link:hover::after { color: var(--ink); transform: translate(2px, -2px); }
+
 .content {
   max-width: 980px;
   margin: 0 auto clamp(48px,7vh,90px);
@@ -365,7 +386,7 @@ h1 {
 
     <aside class="side-panel">
       <div class="eyebrow">Featured project</div>
-      <h1>SafeSteps Toronto</h1>
+      <h1><a class="title-link" href="https://serena8886.github.io/serena-safesteps/" target="_blank" rel="noopener" title="Open the live map">SafeSteps Toronto</a></h1>
       <p class="lede">An interactive pedestrian safety navigator that lets users compare fastest and safer walking routes using real Toronto crime data.</p>
       <div class="tags">
         <span class="tag">Mapbox GL JS</span>

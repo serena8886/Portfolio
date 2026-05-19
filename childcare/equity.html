@@ -325,6 +325,26 @@ h1 {
 }
 .live-link::after { content: '↗'; }
 
+/* Title doubles as a link to the live map */
+.title-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color .25s;
+}
+.title-link::after {
+  content: '↗';
+  font-family: 'Jost', sans-serif;
+  font-size: 0.42em;
+  font-weight: 400;
+  color: var(--muted);
+  vertical-align: super;
+  margin-left: 0.18em;
+  display: inline-block;
+  transition: color .25s, transform .25s;
+}
+.title-link:hover { color: var(--warm); }
+.title-link:hover::after { color: var(--ink); transform: translate(2px, -2px); }
+
 .content {
   max-width: 980px;
   margin: 0 auto clamp(48px,7vh,90px);
@@ -464,8 +484,8 @@ h1 {
     </div>
 
     <aside class="side-panel">
-      <div class="eyebrow">HR web project</div>
-      <h1>The Childcare × Workforce Map</h1>
+      <div class="eyebrow">Workforce equity project</div>
+      <h1><a class="title-link" href="https://serena8886.github.io/Toronto-Child-Care/" target="_blank" rel="noopener" title="Open the live map">The Childcare × Workforce Map</a></h1>
       <p class="lede">An interactive bivariate web map of Toronto. Each of the City's 158 neighbourhoods is encoded on two axes at once: labour-force participation and daycare access within 5 km. The mismatch cells are where benefits design has the strongest business case.</p>
       <div class="tags">
         <span class="tag">Leaflet</span>
@@ -495,7 +515,7 @@ h1 {
       <div class="note-text">Canada's $10/day childcare program lowers the price of a daycare seat but doesn't increase supply. Where supply lags, employer-funded benefit closes the gap.</div>
     </div>
     <div>
-      <div class="note-label">HR angle</div>
+      <div class="note-label">Employer angle</div>
       <div class="note-text">Not a public-policy map. A site-selection and retention tool for DEI, benefits, and workforce-planning teams making real budget decisions.</div>
     </div>
     <div>
@@ -524,7 +544,7 @@ h1 {
 
     <div class="section">
       <div class="section-num">03 · Recommendation logic</div>
-      <h2>From map colour to HR action</h2>
+      <h2>From map colour to benefits action</h2>
       <p>Each axis is split at the 33rd and 67th percentiles of the Toronto distribution, producing a 3×3 matrix. Diagonal cells are the expected pattern; off-diagonal cells are where decisions live.</p>
       <p>For high-LFP, low-daycare neighbourhoods, the map recommends onsite daycare, negotiated childcare partnerships, childcare stipends, or reserved seats — translating spatial signal into concrete benefits-design action.</p>
     </div>
