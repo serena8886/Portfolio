@@ -676,38 +676,6 @@ nav {
   window.addEventListener('load', () => {
     document.body.style.opacity = '1';
   });
-
-  /* ── Pin alignment helper ──────────────────────────────
-     Hold SHIFT and click anywhere on the map.
-     The pin coordinates (left: X%; top: Y%;) are shown in a
-     toast at the bottom and copied to your clipboard.
-     Paste into the corresponding <div class="pin"> in the HTML.
-     Remove this whole block once all pins are placed.
-  ──────────────────────────────────────────────────────── */
-  (function pinHelper(){
-    const mapWrap = document.querySelector('.map-wrap');
-    if (!mapWrap) return;
-    const toast = document.createElement('div');
-    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fbfaf7;padding:12px 20px;border-radius:4px;font-family:ui-monospace,Menlo,monospace;font-size:14px;letter-spacing:.04em;z-index:9999;opacity:0;transition:opacity .25s;pointer-events:none;box-shadow:0 6px 24px rgba(0,0,0,0.25);';
-    document.body.appendChild(toast);
-    const hint = document.createElement('div');
-    hint.textContent = 'Pin helper active — Shift+click the map to copy coords';
-    hint.style.cssText = 'position:fixed;top:80px;right:24px;background:rgba(26,26,26,0.88);color:#fbfaf7;padding:8px 14px;border-radius:4px;font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.06em;z-index:9998;pointer-events:none;';
-    document.body.appendChild(hint);
-    let timer;
-    mapWrap.addEventListener('click', (e) => {
-      if (!e.shiftKey) return;
-      const rect = mapWrap.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
-      const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
-      const snippet = 'left: ' + x + '%; top: ' + y + '%;';
-      if (navigator.clipboard) navigator.clipboard.writeText(snippet).catch(() => {});
-      toast.textContent = snippet + '   (copied)';
-      toast.style.opacity = '1';
-      clearTimeout(timer);
-      timer = setTimeout(() => toast.style.opacity = '0', 2400);
-    });
-  })();
 </script>
 
 </body>

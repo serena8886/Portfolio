@@ -129,6 +129,35 @@ nav {
   color: var(--warm); margin-right: 10px;
 }
 .pin-note-text { font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.7; color: var(--ink); }
+
+/* Map readings — prose interpretation blocks, no numbered pins */
+.map-readings {
+  margin-top: clamp(28px,4vh,40px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 18px 0;
+  border-top: .5px solid var(--rule);
+  border-bottom: .5px solid var(--rule);
+}
+.map-reading-label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--warm);
+  display: block;
+  margin-bottom: 8px;
+}
+.map-reading-text {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink);
+  display: block;
+}
+
 .journal { margin-bottom: clamp(40px,6vh,72px); }
 .journal-grid {
   display: grid;
@@ -253,23 +282,23 @@ nav {
 </header>
 
 <section class="annotated">
-  <div class="section-eyebrow">The maps · four readings</div>
+  <div class="section-eyebrow">The maps · two readings</div>
   <div class="map-wrap">
     <div class="map-stack">
       <img src="Infant Mortality Rates.jpg" alt="Infant mortality rates map.">
       <img src="lisa child.jpg" alt="LISA child collision cluster map.">
     </div>
-    <div class="pin" style="left: 27%; top: 12%;" title="Northern gradient">1</div>
-    <div class="pin" style="left: 42%; top: 39%;" title="GTA low-rate zone">2</div>
-    <div class="pin" style="left: 71%; top: 67%;" title="Child collision clusters">3</div>
-    <div class="pin" style="left: 83%; top: 86%;" title="Spatial outliers">4</div>
   </div>
   <div class="map-caption">The project pairs provincial health-unit choropleths with dissemination-area LISA cluster maps.</div>
-  <div class="pin-notes">
-    <div class="pin-note"><div class="pin-num">1</div><div><span class="pin-note-label">North-south gradient</span><span class="pin-note-text">Infant mortality rates rise in northern and remote regions, showing a spatial pattern tied to structural access differences.</span></div></div>
-    <div class="pin-note"><div class="pin-num">2</div><div><span class="pin-note-label">GTA contrast</span><span class="pin-note-text">The Greater Toronto Area sits among the lowest infant mortality rates, reinforcing the geography of health infrastructure concentration.</span></div></div>
-    <div class="pin-note"><div class="pin-num">3</div><div><span class="pin-note-label">Cluster logic</span><span class="pin-note-text">LISA separates simple high-rate areas from statistically meaningful clusters where similar values gather together.</span></div></div>
-    <div class="pin-note"><div class="pin-num">4</div><div><span class="pin-note-label">Outliers</span><span class="pin-note-text">High-low and low-high categories reveal neighbourhoods that break from their surroundings, often more policy-relevant than broad averages.</span></div></div>
+  <div class="map-readings">
+    <div class="map-reading">
+      <span class="map-reading-label">Infant mortality · the rate map</span>
+      <span class="map-reading-text">The map reads as a north-south gradient: rates rise in remote and northern public health units, and the Greater Toronto Area sits at the low end. The pattern tracks the geography of health infrastructure — distance from care does most of the work.</span>
+    </div>
+    <div class="map-reading">
+      <span class="map-reading-label">Child collisions · the cluster map</span>
+      <span class="map-reading-text">LISA asks a different question. Not where rates are high, but where similar rates cluster spatially — and which neighbourhoods break from their surroundings. The high-low and low-high outliers tend to be more actionable than a flat rate map: they name the exact place where the local pattern stops holding.</span>
+    </div>
   </div>
 </section>
 
