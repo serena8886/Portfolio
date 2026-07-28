@@ -484,8 +484,8 @@ body.intro-active {
     <ul class="about-list fade-line">
       <li>Curious about how people decide, work, and move — in offices and across cities</li>
       <li>A University of Toronto student — Work and Organizations major, GIS minor</li>
-      <li>Equally at home in people analytics and spatial analysis — same rigor, different lens</li>
-      <li>A certified diver who looks for structure beneath the surface — in data, oceans, and organizations</li>
+      <li>The same analyst in offices and cities: find the public data, map the gap, show who gets left out</li>
+      <li>A certified diver — underwater is the one place I stop analyzing</li>
     </ul>
     <p class="fade-line">I work where Work and Organizations meets GIS — bringing analytical rigor to both how people work and how places function. My maps explore urban accessibility, food equity, and public health across Canadian cities; my Work and Organizations focus is on workforce equity and the patterns that move people through organizations.</p>
   </div>
@@ -557,6 +557,12 @@ body.intro-active {
 
 <script>
 /* ── Page fade-in + intro drawer sequence on load ── */
+
+// Feature flag: set to true to re-enable the black welcome-drawer intro
+// animation. While false, the intro overlay is hidden and the sequence below
+// never runs — the code is kept intact but isolated.
+const INTRO_ANIMATION_ENABLED = false;
+
 const wantsContact = sessionStorage.getItem('openContact') === '1';
 const wantsAbout = window.location.hash === '#about';
 
@@ -569,6 +575,13 @@ window.addEventListener('load', () => {
     sessionStorage.removeItem('openContact');
     document.getElementById('intro-overlay').classList.add('gone');
     openContact();
+    return;
+  }
+
+  // Intro animation disabled: hide the black overlay entirely and land
+  // directly on the page. (Everything below is preserved behind the flag.)
+  if (!INTRO_ANIMATION_ENABLED) {
+    document.getElementById('intro-overlay').style.display = 'none';
     return;
   }
 
