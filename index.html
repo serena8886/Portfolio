@@ -338,9 +338,9 @@ nav {
 .contact-close:hover { color: var(--ink); }
 
 .contact-label {
-  font-size: 9px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
+  font-family: 'Kiddo', 'Cormorant Garamond', serif;
+  font-size: 18px;
+  letter-spacing: .04em;
   color: #5a5a5a;
   margin-bottom: 16px;
 }
@@ -356,6 +356,7 @@ nav {
 /* Each letter is wrapped in a <span> by JS; the staggered delay makes a wave. */
 .contact-heading span {
   display: inline-block;
+  white-space: pre;
   animation: letter-bounce 1.1s ease-in-out infinite;
 }
 @keyframes letter-bounce {
@@ -656,7 +657,6 @@ function bounceLetters(el, step) {
   });
 }
 bounceLetters(document.querySelector('.contact-heading'), 0.09);
-bounceLetters(document.querySelector('.contact-label'), 0.06);
 
 /* ── Contact overlay ── */
 function openContact() {
