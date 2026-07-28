@@ -641,21 +641,22 @@ window.addEventListener('load', () => {
   }, 65);
 });
 
-/* ── Bouncing "Contact" heading ── */
+/* ── Bouncing "Contact" heading + "Get in touch" label ── */
 // Wrap each letter in its own <span> and stagger the animation delay so the
 // letters bounce in a left-to-right wave.
-(() => {
-  const heading = document.querySelector('.contact-heading');
-  if (!heading) return;
-  const text = heading.textContent;
-  heading.textContent = '';
+function bounceLetters(el, step) {
+  if (!el) return;
+  const text = el.textContent;
+  el.textContent = '';
   [...text].forEach((ch, i) => {
     const s = document.createElement('span');
-    s.textContent = ch;
-    s.style.animationDelay = (i * 0.09) + 's';
-    heading.appendChild(s);
+    s.textContent = ch === ' ' ? ' ' : ch;  // keep spaces visible when inline-block
+    s.style.animationDelay = (i * step) + 's';
+    el.appendChild(s);
   });
-})();
+}
+bounceLetters(document.querySelector('.contact-heading'), 0.09);
+bounceLetters(document.querySelector('.contact-label'), 0.06);
 
 /* ── Contact overlay ── */
 function openContact() {
